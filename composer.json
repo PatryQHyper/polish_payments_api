@@ -1,0 +1,22 @@
+{
+  "name": "patryqhyper/polish_payments_api",
+  "description": "Library for polish Payment providers",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "PatryQHyper",
+      "email": "patryk@vizauer.pl"
+    }
+  ],
+  "require": {
+    "php": "^7.4|^8.0",
+    "guzzlehttp/guzzle": "^7.0",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "PatryQHyper\\Payments\\": "src/"
+    }
+  }
+}
