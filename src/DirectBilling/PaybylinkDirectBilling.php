@@ -21,7 +21,11 @@ class PaybylinkDirectBilling extends WebClient
         $this->hash = $hash;
     }
 
-    public function generate(float $price, string $description, string $control)
+    public function generate(
+        float $price,
+        string $description,
+        string $control
+    )
     {
         $data = [
             'price' => $price * 100,
@@ -38,15 +42,14 @@ class PaybylinkDirectBilling extends WebClient
             ]
         ], 'POST');
 
-        if ($result->status == 'success')
-        {
+        if ($result->status == 'success') {
             $this->is_generated = true;
             $this->payment_url = $result->clientURL;
 
             return true;
         }
 
-        throw new DirectBillingException('paybylink returned error '.$result->message);
+        throw new DirectBillingException('paybylink returned error ' . $result->message);
     }
 
     public function getTransactionUrl(): ?string

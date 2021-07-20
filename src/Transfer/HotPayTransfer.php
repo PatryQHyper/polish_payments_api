@@ -4,7 +4,7 @@ namespace PatryQHyper\Payments\Transfer;
 
 use PatryQHyper\Payments\WebClient;
 
-class HotPayTransfer extends WebClient
+class HotPayTransfer
 {
     private string $secret;
     private string $pass;
@@ -18,7 +18,15 @@ class HotPayTransfer extends WebClient
         $this->pass = $pass;
     }
 
-    public function generate(float $price, string $service_name, ?string $redirect_url=NULL, ?string $order_id=NULL, ?string $email=NULL, ?string $personal_data=NULL, ?string $payment_method=NULL)
+    public function generate(
+        float $price,
+        string $service_name,
+        ?string $redirect_url=NULL,
+        ?string $order_id=NULL,
+        ?string $email=NULL,
+        ?string $personal_data=NULL,
+        ?string $payment_method=NULL
+    )
     {
         $this->params = [
             'SEKRET'=>$this->secret,

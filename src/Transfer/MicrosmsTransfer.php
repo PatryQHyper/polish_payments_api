@@ -4,7 +4,7 @@ namespace PatryQHyper\Payments\Transfer;
 
 use PatryQHyper\Payments\WebClient;
 
-class MicrosmsTransfer extends WebClient
+class MicrosmsTransfer
 {
     private int $user_id;
     private int $shop_id;
@@ -23,7 +23,13 @@ class MicrosmsTransfer extends WebClient
         $this->use_md5 = $use_md5;
     }
 
-    public function generate(float $amount, ?string $control=NULL, ?string $return_urlc=NULL, ?string $return_url=NULL, ?string $description=NULL)
+    public function generate(
+        float $amount,
+        ?string $control=NULL,
+        ?string $return_urlc=NULL,
+        ?string $return_url=NULL,
+        ?string $description=NULL
+    )
     {
         $data['shopid'] = $this->shop_id;
         $data['amount'] = $amount;

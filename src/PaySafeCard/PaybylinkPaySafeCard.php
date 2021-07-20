@@ -21,7 +21,14 @@ class PaybylinkPaySafeCard extends WebClient
         $this->pin = $pin;
     }
 
-    public function generate(float $price, string $return_ok, string $return_fail, string $notify_url, string $control, ?string $description=NULL)
+    public function generate(
+        float $price,
+        string $return_ok,
+        string $return_fail,
+        string $notify_url,
+        string $control,
+        ?string $description=NULL
+    )
     {
         $data = [
             'userid'=>$this->user_id,

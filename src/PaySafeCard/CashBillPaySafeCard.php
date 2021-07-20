@@ -22,7 +22,20 @@ class CashBillPaySafeCard extends WebClient
         $this->test_environment = $test_environment;
     }
 
-    public function generate(float $price, string $title, string $email, string $additionalData = '', string $description = '', string $returnUrl = NULL, string $negativeReturnUrl = NULL, string $firstName = NULL, string $surname = NULL, string $language = 'PL', string $currency = 'PLN', $referer = NULL): bool
+    public function generate(
+        float $price,
+        string $title,
+        string $email,
+        string $additionalData = '',
+        string $description = '',
+        string $returnUrl = NULL,
+        string $negativeReturnUrl = NULL,
+        string $firstName = NULL,
+        string $surname = NULL,
+        string $language = 'PL',
+        string $currency = 'PLN',
+        $referer = NULL
+    ): bool
     {
         $params['title'] = $title;
         $params['amount.value'] = $price;

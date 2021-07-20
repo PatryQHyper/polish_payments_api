@@ -20,7 +20,15 @@ class PaybylinkTransfer extends WebClient
         $this->hash = $hash;
     }
 
-    public function generate(float $price, ?string $control=NULL, ?string $description=NULL, ?string $email=NULL, ?string $notifyUrl=NULL, ?string $returnUrlSuccess=NULL, ?string $customFinishNote=NULL)
+    public function generate(
+        float $price,
+        ?string $control=NULL,
+        ?string $description=NULL,
+        ?string $email=NULL,
+        ?string $notifyUrl=NULL,
+        ?string $returnUrlSuccess=NULL,
+        ?string $customFinishNote=NULL
+    )
     {
         $params['shopId'] = $this->shop_id;
         $params['price'] = sprintf('%.2f', $price);

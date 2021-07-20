@@ -27,7 +27,21 @@ class CashBillTransfer extends WebClient
         return $this->doRequest('https://pay.cashbill.pl/' . ($this->test_environment ? 'testws' : 'ws') . '/rest/paymentchannels/' . $this->shop_id . '/' . $lang);
     }
 
-    public function generate(float $price, string $title, ?string $additionalData = NULL, ?string $description = NULL, ?string $returnUrl = NULL, ?string $negativeReturnUrl = NULL, ?string $email = NULL, ?string $paymentChannel = NULL, ?string $firstName = NULL, ?string $surname = NULL, ?string $language = NULL, ?string $currency = 'PLN', $referer = NULL): bool
+    public function generate(
+        float $price,
+        string $title,
+        ?string $additionalData = NULL,
+        ?string $description = NULL,
+        ?string $returnUrl = NULL,
+        ?string $negativeReturnUrl = NULL,
+        ?string $email = NULL,
+        ?string $paymentChannel = NULL,
+        ?string $firstName = NULL,
+        ?string $surname = NULL,
+        ?string $language = NULL,
+        ?string $currency = 'PLN',
+        $referer = NULL
+    ): bool
     {
         $params['title'] = $title;
         $params['amount.value'] = $price;

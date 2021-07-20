@@ -20,7 +20,13 @@ class SimPayDirectBilling extends WebClient
         $this->api_key = $api_key;
     }
 
-    public function generate(string $control, float $amount, ?string $complete_url=NULL, ?string $failure_url=NULL, ?int $provider=NULL)
+    public function generate(
+        string $control,
+        float $amount,
+        ?string $complete_url=NULL,
+        ?string $failure_url=NULL,
+        ?int $provider=NULL
+    )
     {
         $data['serviceId'] = $this->service_id;
         $data['control'] = $control;

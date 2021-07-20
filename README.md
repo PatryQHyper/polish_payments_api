@@ -1,19 +1,24 @@
 # Polish Payments Providers PHP library
 
 ### Supported payment methods:
+
 * SMS Premium
 * Bank transfer
 * PaySafeCard
 * DirectCarrierBilling
 
 ### Installation
+
 To install this library, you have to use Composer
+
 ```bash
 composer require patryqhyper/polish_payments_api
 ```
 
 ### Supported providers
+
 #### SMS
+
 * GetPay
 
 ```php
@@ -41,6 +46,7 @@ try {
     echo $exception->getMessage();
 }
 ```
+
 * Paybylink
 
 ```php
@@ -67,6 +73,7 @@ try {
     echo $exception->getMessage();
 }
 ```
+
 * MicroSMS
 
 ```php
@@ -121,6 +128,7 @@ try {
     echo $exception->getMessage();
 }
 ```
+
 * CashBill
 
 ```php
@@ -207,7 +215,9 @@ try {
 ```
 
 #### Bank transfer
+
 * Cashbill
+
 ###### Generate payment
 
 ```php
@@ -282,6 +292,7 @@ try {
 * Paybylink
 
 ###### Generate transaction
+
 ```php
 <?php
 
@@ -302,6 +313,7 @@ try {
 ```
 
 ###### Generate notification signature. After generating, you have to check signature sent with request.
+
 ```php
 <?php
 
@@ -322,7 +334,9 @@ try {
 ```
 
 * MicroSMS
+
 ###### Generate payment
+
 ```php
 <?php
 
@@ -354,6 +368,7 @@ try {
 ```
 
 ###### Check IP address
+
 ```php
 <?php
 
@@ -375,7 +390,9 @@ try {
 ```
 
 * HotPay
+
 ###### Generate payment
+
 ```php
 <?php
 
@@ -424,9 +441,100 @@ try {
 }
 ```
 
+* DotPay
+
+###### Generate payment
+```php
+<?php
+
+use PatryQHyper\Payments\Transfer\DotPayTransfer;
+
+require(__DIR__.'/../vendor/autoload.php');
+
+try {
+    $payment = new DotPayTransfer('shop_id (int)', 'pin', '(bool) sandbox, default: false');
+
+    #For more info visit DotPay documentation (https://www.dotpay.pl/developer/doc/api_payment/pl/index.html)
+    $payment->generate(
+        '(float) amount',
+        'description',
+        'redirect_url',
+        'urlc',
+        'control',
+        'channel_groups',
+        '(int) ignore_last_payment_channel',
+        'currency',
+        '(int) channel',
+        '(int) ch_lock',
+        '(int) type',
+        'button_text',
+        '(int) bylaw',
+        '(int) personal_data',
+        'expiration_date',
+        'firstname',
+        'surname',
+        'email',
+        'street',
+        'street_n1',
+        'street_n2',
+        'state',
+        'addr3',
+        'city',
+        'postcode',
+        'phone',
+        'country',
+        'p_info',
+        'p_email',
+        'language',
+        'customer',
+        'deladdr',
+        'blik_code',
+        'gp_token',
+        'ap_token',
+    );
+    
+    # Redirect to payment page using GET method
+    header('Location: '.$payment->getRedirectUrl(true)); # parameter in function getRedirectUrl() is adding parameters to url
+
+    # OR
+
+    # Redirect via FORM using POST method
+    echo '<form method="POST" action="'.$payment->getRedirectUrl().'">';
+    foreach ($payment->getParameters() as $name => $value)
+    {
+        echo '<input type="hidden" name="'.$name.'" value="'.$value.'">';
+    }
+    echo '<button type="submit">Pay via DotPay</button> </form>';
+}
+catch (\PatryQHyper\Payments\Exceptions\TransferException $exception)
+{
+    echo $exception->getMessage();
+}
+```
+
+###### Get notification signature
+```php
+<?php
+
+use PatryQHyper\Payments\Transfer\DotPayTransfer;
+
+require(__DIR__.'/../vendor/autoload.php');
+
+try {
+    $payment = new DotPayTransfer('shop_id (int)', 'pin', '(bool) sandbox, default: false');
+
+    $signature = $payment->generateUrlcSignature($_POST); #if you are using Laravel framework, you can do $request->all()
+}
+catch (\PatryQHyper\Payments\Exceptions\TransferException $exception)
+{
+    echo $exception->getMessage();
+}
+```
+
 #### PaySafeCard
 
 * CashBill
+
 ###### Generate payment
 
 ```php
@@ -505,7 +613,9 @@ try {
 ```
 
 * HotPay
+
 ###### Generate payment
+
 ```php
 <?php
 
@@ -516,7 +626,7 @@ use PatryQHyper\Payments\PaySafeCard\HotPayPaySafeCard;
 try {
     $payment = new HotPayPaySafeCard('secret', 'notification_password');
 
-    $payment->generate('price (float)', 'service_name', '?redirect_url', '?order_id', '?email', '?personal_data', '?payment_method (available: BLIK and PAYPAL)');
+    $payment->generate('price (float)', 'service_name', '?redirect_url', '?order_id', '?email', '?personal_data');
 
     # Redirect to payment page using GET method
     header('Location: '.$payment->getRedirectUrl(true)); # parameter in function getRedirectUrl() is adding parameters to url
@@ -555,7 +665,9 @@ try {
 ```
 
 #### Direct Carrier Billing
+
 * SimPay
+
 ```php
 <?php
 
@@ -578,6 +690,7 @@ try {
 ```
 
 * Paybylink
+
 ```php
 <?php
 
