@@ -1,5 +1,4 @@
-.idea/
-composer.lock
-vendor/
 tests/
-.gitignore
+vendor/
+./composer.lock
+composer.lock
