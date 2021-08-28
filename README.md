@@ -403,7 +403,7 @@ use PatryQHyper\Payments\Transfer\HotPayTransfer;
 try {
     $payment = new HotPayTransfer('secret', 'notification_password');
 
-    $payment->generate('price (float)', 'service_name', '?redirect_url', '?order_id', '?email', '?personal_data', '?payment_method (available: BLIK and PAYPAL)');
+    $payment->generate('price (float)', 'service_name', '?redirect_url', '?order_id', '?email', '?personal_data', '?payment_method (available: BLIK and PAYPAL)', 'generate_hash (bool, default: true)');
 
     # Redirect to payment page using GET method
     header('Location: '.$payment->getRedirectUrl(true)); # parameter in function getRedirectUrl() is adding parameters to url
@@ -423,7 +423,7 @@ try {
 }
 ```
 
-###### Get signature to notification
+###### Generate signature to notification
 
 ```php
 <?php
@@ -436,6 +436,44 @@ try {
     $payment = new HotPayTransfer('secret', 'notification_password');
 
     $hash = $payment->generateHash($_POST);
+} catch (\PatryQHyper\Payments\Exceptions\TransferException $exception) {
+    echo $exception->getMessage();
+}
+```
+
+* HotPay API (new)
+
+###### Generate payment
+```php
+<?php
+require __DIR__.'/../vendor/autoload.php';
+
+use PatryQHyper\Payments\Transfer\HotPayApiTransfer;
+
+try {
+    $payment = new HotPayApiTransfer('secret', 'notification_password');
+
+    $payment->generate('price (float)', 'service_name', 'https://google.com', 'orid', 'email@wp.pl', 'pesonal_data');
+
+    echo $payment->getTransactionUrl(); # redirect url
+    
+} catch (\PatryQHyper\Payments\Exceptions\TransferException $exception) {
+    echo $exception->getMessage();
+}
+```
+
+###### Generate signature to notification
+```php
+<?php
+require __DIR__.'/../vendor/autoload.php';
+
+use PatryQHyper\Payments\Transfer\HotPayApiTransfer;
+
+try {
+    $payment = new HotPayApiTransfer('secret', 'notification_password');
+
+    $hash = $payment->generateHash($_POST);
+    
 } catch (\PatryQHyper\Payments\Exceptions\TransferException $exception) {
     echo $exception->getMessage();
 }

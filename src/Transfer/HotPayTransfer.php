@@ -2,8 +2,6 @@
 
 namespace PatryQHyper\Payments\Transfer;
 
-use PatryQHyper\Payments\WebClient;
-
 class HotPayTransfer
 {
     private string $secret;
@@ -19,32 +17,39 @@ class HotPayTransfer
     }
 
     public function generate(
-        float $price,
-        string $service_name,
-        ?string $redirect_url=NULL,
-        ?string $order_id=NULL,
-        ?string $email=NULL,
-        ?string $personal_data=NULL,
-        ?string $payment_method=NULL
+        float   $price,
+        string  $service_name,
+        ?string $redirect_url = NULL,
+        ?string $order_id = NULL,
+        ?string $email = NULL,
+        ?string $personal_data = NULL,
+        ?string $payment_method = NULL,
+        bool    $generate_signature = TRUE
     )
     {
         $this->params = [
-            'SEKRET'=>$this->secret,
-            'KWOTA'=>$price,
-            'NAZWA_USLUGI'=>$service_name,
-            'ADRES_WWW'=>$redirect_url,
-            'ID_ZAMOWIENIA'=>$order_id,
-            'EMAIL'=>$email,
-            'DANE_OSOBOWE'=>$personal_data,
-            'TYP_PLATNOSCI'=>$payment_method,
+            'KWOTA' => $price,
+            'NAZWA_USLUGI' => $service_name,
+            'ADRES_WWW' => $redirect_url,
+            'ID_ZAMOWIENIA' => $order_id,
+            'SEKRET' => $this->secret,
         ];
+
+        if($generate_signature) $this->params['HASH'] = hash('sha256',
+            $this->pass.';'.
+            implode(';', $this->params)
+        );
+
+        $this->params['EMAIL'] = $email;
+        $this->params['DANE_OSOBOWE'] = $personal_data;
+        $this->params['TYP_PLATNOSCI'] = $payment_method;
 
         return true;
     }
 
-    public function getRedirectUrl(bool $add_parameters=false)
+    public function getRedirectUrl(bool $add_parameters = false)
     {
-        return $this->redirect_url.($add_parameters ? ('?'.http_build_query($this->params)) : '');
+        return $this->redirect_url . ($add_parameters ? ('?' . http_build_query($this->params)) : '');
     }
 
     public function getParameters()
@@ -54,6 +59,6 @@ class HotPayTransfer
 
     public function generateHash($post)
     {
-        return hash('sha256', $this->pass.';'.$post['KWOTA'].';'.$post['ID_PLATNOSCI'].';'.$post["ID_ZAMOWIENIA"].';'.$post['STATUS'].';'.$this->secret);
+        return hash('sha256', $this->pass . ';' . $post['KWOTA'] . ';' . $post['ID_PLATNOSCI'] . ';' . $post["ID_ZAMOWIENIA"] . ';' . $post['STATUS'] . ';' . $post['SECURE'] . ';' . $this->secret);
     }
 }
