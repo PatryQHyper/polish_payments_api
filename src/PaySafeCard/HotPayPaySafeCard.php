@@ -24,18 +24,25 @@ class HotPayPaySafeCard extends WebClient
         ?string $redirect_url=NULL,
         ?string $order_id=NULL,
         ?string $email=NULL,
-        ?string $personal_data=NULL
+        ?string $personal_data=NULL,
+        bool    $generate_signature = TRUE
     )
     {
         $this->params = [
-            'SEKRET'=>$this->secret,
-            'KWOTA'=>$price,
-            'NAZWA_USLUGI'=>$service_name,
-            'ADRES_WWW'=>$redirect_url,
-            'ID_ZAMOWIENIA'=>$order_id,
-            'EMAIL'=>$email,
-            'DANE_OSOBOWE'=>$personal_data,
+            'KWOTA' => $price,
+            'NAZWA_USLUGI' => $service_name,
+            'ADRES_WWW' => $redirect_url,
+            'ID_ZAMOWIENIA' => $order_id,
+            'SEKRET' => $this->secret,
         ];
+
+        if($generate_signature) $this->params['HASH'] = hash('sha256',
+            $this->pass.';'.
+            implode(';', $this->params)
+        );
+
+        $this->params['EMAIL'] = $email;
+        $this->params['DANE_OSOBOWE'] = $personal_data;
 
         return true;
     }
