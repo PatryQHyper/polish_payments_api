@@ -59,6 +59,6 @@ class HotPayPaySafeCard extends WebClient
 
     public function generateHash($post)
     {
-        return hash('sha256', $this->pass.';'.$post['KWOTA'].';'.$post['ID_PLATNOSCI'].';'.$post["ID_ZAMOWIENIA"].';'.$post['STATUS'].';'.$this->secret);
+        return hash('sha256', $this->pass . ';' . $post['KWOTA'] . ';' . $post['ID_PLATNOSCI'] . ';' . $post["ID_ZAMOWIENIA"] . ';' . $post['STATUS'] . ';' . $post['SECURE'] . ';' . $this->secret);
     }
 }
