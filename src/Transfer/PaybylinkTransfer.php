@@ -59,7 +59,7 @@ class PaybylinkTransfer extends WebClient
 
     public function generateIpnHash(array $params)
     {
-        return hash('sha256', $params['transactionId'].'|'.$params['control'].'|'.$params['email'].'|'.$params['amountPaid'].'|'.$params['notificationAttempt'].'|'.$params['paymentType'].'|'.$params['apiVersion']);
+        return hash('sha256', $this->hash.'|'.$params['transactionId'].'|'.$params['control'].'|'.$params['email'].'|'.sprintf('%.2f', $params['amountPaid']).'|'.$params['notificationAttempt'].'|'.$params['paymentType'].'|'.$params['apiVersion']);
     }
 
     public function getTransactionId(): ?string
