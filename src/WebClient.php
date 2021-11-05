@@ -13,7 +13,7 @@ class WebClient
 
         $client = new Client();
         try {
-            $data['headers']['User-Agent'] = 'PatryQHyperPaymentsWrapper/1.4';
+            $data['headers']['User-Agent'] = 'PatryQHyperPaymentsWrapper/1.6';
             $response = $client->request($method, $url, $data);
             if($get_body) return json_decode($response->getBody());
         }
