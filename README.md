@@ -446,6 +446,7 @@ try {
 * HotPay API (new)
 
 ###### Generate payment
+
 ```php
 <?php
 require __DIR__.'/../vendor/autoload.php';
@@ -465,6 +466,7 @@ try {
 ```
 
 ###### Generate signature to notification
+
 ```php
 <?php
 require __DIR__.'/../vendor/autoload.php';
@@ -484,6 +486,7 @@ try {
 * DotPay
 
 ###### Generate payment
+
 ```php
 <?php
 
@@ -553,6 +556,7 @@ catch (\PatryQHyper\Payments\Exceptions\TransferException $exception)
 ```
 
 ###### Get notification signature
+
 ```php
 <?php
 
@@ -567,6 +571,53 @@ try {
 }
 catch (\PatryQHyper\Payments\Exceptions\TransferException $exception)
 {
+    echo $exception->getMessage();
+}
+```
+
+* DPay.pl
+
+###### Generate payment
+
+```php
+<?php
+
+use PatryQHyper\Payments\Transfer\DPayTransfer;
+
+require(__DIR__.'/../vendor/autoload.php');
+
+try {
+    $payment = new DPayTransfer('service_name', 'secret_hash', 'use_test_environment (default: false, bool)');
+
+    #For more info visit DPay documentation (https://docs.dpay.pl)
+    $payment->generate(
+        float   $price,
+        string  $successUrl,
+        string  $failUrl,
+        string  $ipnUrl,
+        ?string $description = NULL,
+        ?string $custom = NULL,
+        ?bool   $installment = NULL,
+        ?bool   $creditCard = NULL,
+        ?bool   $paysafecard = NULL,
+        ?bool   $paypal = NULL,
+        ?bool   $noBanks = NULL,
+        ?string $channel = NULL,
+        ?string $email = NULL,
+        ?string $client_name = NULL,
+        ?string $client_surname = NULL,
+        ?bool   $accept_tos = true,
+        ?string $style = 'default'
+    );
+    
+    echo $payment->getTransactionId(); //generated transaction id
+    echo '<br>';
+    echo $payment->getTransactionUrl(); //generated transaction url
+}
+catch (\PatryQHyper\Payments\Exceptions\TransferException $exception)
+{
+    # You may get "DPay error: Invalid JSON." error, which is not my fault.
+    # DPay's api is very strange, it's sometimes working, sometime not.
     echo $exception->getMessage();
 }
 ```
