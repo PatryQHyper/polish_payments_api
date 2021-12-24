@@ -7,6 +7,8 @@
 * PaySafeCard
 * DirectCarrierBilling
 
+Changed versioning, so from now it's v2.0.0
+
 ### Installation
 
 To install this library, you have to use Composer
@@ -645,6 +647,47 @@ try {
     # $payment->getPaymentUrl(); - receive payment url
 
 
+} catch (\PatryQHyper\Payments\Exceptions\PaySafeCardException $exception) {
+    echo $exception->getMessage();
+}
+```
+
+* HotPay "API" (new)
+
+###### Generate payment
+
+```php
+<?php
+
+require(__DIR__.'/../vendor/autoload.php');
+
+use PatryQHyper\Payments\PaySafeCard\HotPayApiPaySafeCard;
+
+try {
+    $payment = new HotPayApiPaySafeCard('secret', 'notification_password');
+
+    $payment->generate('price (float)', 'service_name', '?redirect_url', '?order_id', '?email', '?personal_data');
+
+    $payment->getTransactionUrl(); //generated transaction url
+
+} catch (\PatryQHyper\Payments\Exceptions\PaySafeCardException $exception) {
+    echo $exception->getMessage();
+}
+```
+
+###### Get signature to notification
+
+```php
+<?php
+
+require(__DIR__.'/../vendor/autoload.php');
+
+use PatryQHyper\Payments\PaySafeCard\HotPayApiPaySafeCard;
+
+try {
+    $payment = new HotPayApiPaySafeCard('secret', 'notification_password');
+
+    $hash = $payment->generateHash($_POST);
 } catch (\PatryQHyper\Payments\Exceptions\PaySafeCardException $exception) {
     echo $exception->getMessage();
 }

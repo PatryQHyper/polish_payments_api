@@ -3,5 +3,3 @@ vendor/
 ./composer.lock
 composer.lock
 .idea/
-.gitignore
-./.gitignore
