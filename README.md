@@ -7,7 +7,7 @@
 * PaySafeCard
 * DirectCarrierBilling
 
-Changed versioning, so from now it's v2.0.0
+Changed versioning, so from now it's v1.6.0
 
 ### Installation
 
@@ -620,6 +620,31 @@ catch (\PatryQHyper\Payments\Exceptions\TransferException $exception)
     # DPay's api is very strange, it's sometimes working, sometime not.
     echo $exception->getMessage();
 }
+```
+
+* PayU.pl
+
+###### Generate payment
+```php
+<?php
+
+use PatryQHyper\Payments\Transfer\PayUTransfer;
+
+require(__DIR__.'/../vendor/autoload.php');
+
+$payu = new PayUTransfer('posId (int)', 'md5 key', 'oauthClientId (int)', 'oauthClientSecret', 'sandbox (bool, default: false)');
+
+$payu->oauthAuthorize();
+//$payu->getOauthToken();
+
+$payu->addProduct('productName', 'unitPrice (float)', 'quantity (int)');
+
+$payu->setBuyer('buyerEmail', 'phone (nullable)', 'firstname (nullable)', 'surname (nullable)', 'language (default: pl)');
+
+$payu->generatePayment('notifyUrl', 'customerIp', 'description', 'extOrderId (nullable)', 'currencyCode (default: PLN)', 'visibleDescription (nullable)', 'continueUrl (nullable)');
+
+$payu->getPaymentId(); //payment ID
+$payu->getPaymentUrl(); // payment Url
 ```
 
 #### PaySafeCard
