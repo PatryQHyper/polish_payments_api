@@ -111,7 +111,7 @@ class PayUTransfer extends WebClient
 
         if ($extOrderId) $data['extOrderId'] = $extOrderId;
         if ($visibleDescription) $data['visibleDescription'] = $visibleDescription;
-        if ($continueUrl) $data['continueUrl'] = urlencode($continueUrl);
+        if ($continueUrl) $data['continueUrl'] = $continueUrl;
 
         $request = $this->doRequest($this->payuUrl . '/api/v2_1/orders', [
             'headers' => [
