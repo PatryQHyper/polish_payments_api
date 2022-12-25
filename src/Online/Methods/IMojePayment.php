@@ -205,27 +205,33 @@ class IMojePayment extends PaymentAbstract
     public function verifySignature(string $header, string $payload, string $serviceKey): bool
     {
         $parsedHeader = $this->parseSignatureHeader($header);
-        if (isset($parsedHeader['signature'])) {
-            if (strtoupper($parsedHeader['alg']) == 'MD5')
-                $hash = md5($payload . $serviceKey);
-            else if (in_array(strtoupper($parsedHeader['alg']), ['SHA', 'SHA1', 'SHA-1']))
-                $hash = sha1($payload . $serviceKey);
-            else
-                $hash = hash(strtolower($parsedHeader['alg']), $payload . $serviceKey);
-
-            if (strcmp($parsedHeader['signature'], $hash) == 0) {
-                return true;
-            }
-
-            if($parsedHeader['merchantid'] == $this->merchantId) {
-                return true;
-            }
-
-            if($parsedHeader['serviceid'] == $this->serviceId) {
-                return true;
-            }
+        if (!isset($parsedHeader['signature'])) {
+            return false;
         }
-        return false;
+
+        if (strtoupper($parsedHeader['alg']) == 'MD5') {
+            $hash = md5($payload . $serviceKey);
+        }
+        else if (in_array(strtoupper($parsedHeader['alg']), ['SHA', 'SHA1', 'SHA-1'])) {
+            $hash = sha1($payload . $serviceKey);
+        }
+        else {
+            $hash = hash(strtolower($parsedHeader['alg']), $payload . $serviceKey);
+        }
+
+        if (strcmp($parsedHeader['signature'], $hash) != 0) {
+            return false;
+        }
+
+        if($parsedHeader['merchantid'] != $this->merchantId) {
+            return false;
+        }
+
+        if($parsedHeader['serviceid'] != $this->serviceId) {
+            return false;
+        }
+
+        return true;
     }
 
     protected function parseSignatureHeader(string $header): ?array

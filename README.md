@@ -20,3 +20,5 @@ composer require patryqhyper/polish_payments_api:^3.0
 - PayU
 - SimPay
 - GetPay
+- Imoje
+- MicroSMS
