@@ -184,4 +184,54 @@ class IMojePayment extends PaymentAbstract
 
         throw new PaymentException(sprintf('iMoje error [%s]: %s', $request->getStatusCode(), $request->getBody()));
     }
+
+    public function verifySignature(string $header, string $payload, string $serviceKey): bool
+    {
+        $parsedHeader = $this->parseSignatureHeader($header);
+        if (isset($parsedHeader['signature'])) {
+            if (strtoupper($parsedHeader['alg']) == 'MD5')
+                $hash = md5($payload . $serviceKey);
+            else if (in_array(strtoupper($parsedHeader['alg']), ['SHA', 'SHA1', 'SHA-1']))
+                $hash = sha1($payload . $serviceKey);
+            else
+                $hash = hash(strtolower($parsedHeader['alg']), $payload . $serviceKey);
+
+            if (strcmp($parsedHeader['signature'], $hash) == 0) {
+                return true;
+            }
+
+            if($parsedHeader['merchantid'] == $this->merchantId) {
+                return true;
+            }
+
+            if($parsedHeader['serviceid'] == $this->serviceId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected function parseSignatureHeader(string $header): ?array
+    {
+        if (empty($header)) {
+            return null;
+        }
+
+        $signatureData = [];
+
+        $list = explode(';', rtrim($header, ';'));
+        if (empty($list)) {
+            return null;
+        }
+
+        foreach ($list as $value) {
+            $explode = explode('=', $value);
+            if (count($explode) != 2) {
+                return null;
+            }
+            $signatureData[$explode[0]] = $explode[1];
+        }
+
+        return $signatureData;
+    }
 }
