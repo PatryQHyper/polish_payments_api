@@ -185,6 +185,23 @@ class IMojePayment extends PaymentAbstract
         throw new PaymentException(sprintf('iMoje error [%s]: %s', $request->getStatusCode(), $request->getBody()));
     }
 
+    public function getTransactionInfo(string $transactionId) {
+        $request = $this->doRequest(sprintf('%s/%s/transactions/%s', $this->iMojeUrl, $this->merchantId, $transactionId), [
+            'headers' => [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->apiToken,
+                'Content-Type' => 'application/json',
+                'Cache-Control' => 'no-cache',
+            ],
+        ], 'GET', false, false);
+
+        if (in_array($request->getStatusCode(), [200, 201, 202, 204])) {
+            return json_decode($request->getBody());
+        }
+
+        throw new PaymentException(sprintf('iMoje error [%s]: %s', $request->getStatusCode(), $request->getBody()));
+    }
+
     public function verifySignature(string $header, string $payload, string $serviceKey): bool
     {
         $parsedHeader = $this->parseSignatureHeader($header);
