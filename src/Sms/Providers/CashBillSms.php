@@ -26,13 +26,12 @@ class CashBillSms extends SmsAbstract
     {
         $request = $this->doRequest(sprintf('https://sms.cashbill.pl/code/%s/%s', $this->token, $code), [], 'GET', false, false);
 
-        $json = json_decode($request);
+        $json = json_decode($request->getBody());
         if (isset($json->error))
             throw new InvalidSmsCodeException();
 
         if (!$json->active || $json->activeFrom != null)
             throw new UsedSmsCodeException();
-
 
         $this->smsNumber = $json->number;
         return true;
