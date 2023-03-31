@@ -8,8 +8,11 @@
 namespace PatryQHyper\Payments\Providers;
 
 use PatryQHyper\Payments\Exceptions\GeneratePaymentException;
+use PatryQHyper\Payments\Exceptions\PolishPaymentsApiException;
 use PatryQHyper\Payments\Providers\Miscellaneous\CashBill\AbstractEnvironment;
 use PatryQHyper\Payments\Providers\Miscellaneous\CashBill\ProductionEnvironment;
+use PatryQHyper\Payments\Providers\Notifications\CashBillNotification;
+use PatryQHyper\Payments\Providers\Notifications\Notification;
 use PatryQHyper\Payments\Providers\Setters\CashBillSetters;
 use PatryQHyper\Payments\Responses\PaymentGeneratedResponse;
 
@@ -82,8 +85,29 @@ class CashBill extends CashBillSetters
         throw new GeneratePaymentException(sprintf('unexpected error (id or redirectUrl dont exist): %s', $request->getBody()));
     }
 
-    public function handleNotification()
+    public function handleNotification(object|array $payload): Notification
     {
-        // TODO: Implement handleNotification() method.
+        return (new CashBillNotification($payload, [
+            'shopId' => $this->shopId,
+            'shopKey' => $this->shopKey,
+        ]))->handle();
+    }
+
+    /**
+     * @throws PolishPaymentsApiException
+     */
+    public function getTransactionInfo(string $transactionId): object
+    {
+        $request = $this->doRequest(sprintf('%s/payment/%s/%s', $this->environment->getUrl(), $this->shopId, $transactionId), [
+            'query' => [
+                'sign' => sha1($transactionId . $this->shopKey),
+            ],
+        ]);
+
+        if($request->getStatusCode() != 200) {
+            throw new PolishPaymentsApiException(sprintf('CashBill error: %s', $request->getBody()));
+        }
+
+        return json_decode($request->getBody());
     }
 }
