@@ -24,11 +24,4 @@ class CashBillNotification extends Notification
 
         return $this->valid();
     }
-
-    public function responseOk()
-    {
-        http_response_code(200);
-        header('Content-Type: plain/text');
-        exit('OK');
-    }
 }

@@ -47,7 +47,11 @@ abstract class Notification
      */
     abstract public function handle();
 
-    abstract public function responseOk();
+    public function responseOk() {
+        http_response_code(200);
+        header('Content-Type: plain/text');
+        exit('OK');
+    }
 
     public function isValid(): bool
     {
