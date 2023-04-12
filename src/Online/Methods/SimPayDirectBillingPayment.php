@@ -26,6 +26,7 @@ class SimPayDirectBillingPayment extends PaymentAbstract
     private string $returnSuccess;
     private string $returnFail;
     private string $phoneNumber;
+    private string $steamId;
 
     public function __construct(string $apiKey, string $apiPassword, int $serviceId, string $serviceHash)
     {
@@ -77,6 +78,12 @@ class SimPayDirectBillingPayment extends PaymentAbstract
         return $this;
     }
 
+    public function setSteamId(string $steamId): SimPayDirectBillingPayment
+    {
+        $this->steamId = $steamId;
+        return $this;
+    }
+
     public function generatePayment()
     {
         $array['amount'] = $this->amount;
@@ -86,6 +93,7 @@ class SimPayDirectBillingPayment extends PaymentAbstract
         if (isset($this->returnSuccess)) $array['returns']['success'] = $this->returnSuccess;
         if (isset($this->returnFail)) $array['returns']['failure'] = $this->returnFail;
         if (isset($this->phoneNumber)) $array['phoneNumber'] = $this->phoneNumber;
+        if (isset($this->steamId)) $array['steamid'] = $this->steamId;
         $array['signature'] = $this->getPaymentSignature();
 
         $request = $this->doRequest(sprintf('https://api.simpay.pl/directbilling/%d/transactions', $this->serviceId), [
@@ -116,6 +124,7 @@ class SimPayDirectBillingPayment extends PaymentAbstract
         if (isset($this->returnSuccess)) $array[] = $this->returnSuccess;
         if (isset($this->returnFail)) $array[] = $this->returnFail;
         if (isset($this->phoneNumber)) $array[] = $this->phoneNumber;
+        if (isset($this->steamId)) $array[] = $this->phoneNumber;
 
         $array[] = $this->serviceHash;
 
