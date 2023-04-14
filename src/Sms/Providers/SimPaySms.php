@@ -69,4 +69,18 @@ class SimPaySms extends SmsAbstract
 
         throw new PaymentException('SimPay error:' . $request->getBody());
     }
+    public function getSmsNumberToService(int $serviceId, int $number)
+    {
+        $request = $this->doRequest(sprintf('https://api.simpay.pl/sms/%d/numbers/%d', $serviceId, $number), [
+            'headers' => [
+                'X-SIM-KEY' => $this->apiKey,
+                'X-SIM-PASSWORD' => $this->apiPassword,
+            ],
+        ], useFileGetContentsToGet: false, getBody: false);
+        if ($request->getStatusCode() == 200) {
+            return json_decode($request->getBody())->data;
+        }
+
+        throw new PaymentException('SimPay error:' . $request->getBody());
+    }
 }
