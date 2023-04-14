@@ -124,7 +124,7 @@ class SimPayDirectBillingPayment extends PaymentAbstract
         if (isset($this->returnSuccess)) $array[] = $this->returnSuccess;
         if (isset($this->returnFail)) $array[] = $this->returnFail;
         if (isset($this->phoneNumber)) $array[] = $this->phoneNumber;
-        if (isset($this->steamId)) $array[] = $this->phoneNumber;
+        if (isset($this->steamId)) $array[] = $this->steamId;
 
         $array[] = $this->serviceHash;
 
