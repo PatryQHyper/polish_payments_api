@@ -96,7 +96,7 @@ class SimPayDirectBillingPayment extends PaymentAbstract
         if (isset($this->steamId)) $array['steamid'] = $this->steamId;
         $array['signature'] = $this->getPaymentSignature();
 
-        $request = $this->doRequest(sprintf('https://api.simpay.pl/directbilling/%d/transactions', $this->serviceId), [
+        $request = $this->doRequest(sprintf('https://api.simpay.pl/directbilling/%s/transactions', $this->serviceId), [
             'json' => $array,
             'headers' => [
                 'X-SIM-KEY' => $this->apiKey,
