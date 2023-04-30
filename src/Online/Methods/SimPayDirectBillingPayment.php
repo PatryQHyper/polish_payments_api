@@ -16,7 +16,7 @@ class SimPayDirectBillingPayment extends PaymentAbstract
 {
     private string $apiKey;
     private string $apiPassword;
-    private int $serviceId;
+    private string $serviceId;
     private string $serviceHash;
 
     private float $amount;
@@ -28,7 +28,7 @@ class SimPayDirectBillingPayment extends PaymentAbstract
     private string $phoneNumber;
     private string $steamId;
 
-    public function __construct(string $apiKey, string $apiPassword, int $serviceId, string $serviceHash)
+    public function __construct(string $apiKey, string $apiPassword, string $serviceId, string $serviceHash)
     {
         $this->apiKey = $apiKey;
         $this->apiPassword = $apiPassword;
