@@ -71,7 +71,7 @@ class DpayDirectbillingPayment extends PaymentAbstract
             'json' => $array
         ], 'POST');
 
-        if (!isset($request->status) || !$request->status || $request->error)
+        if (!isset($request->status) || isset($request->error) || !$request->status || $request->error)
             throw new PaymentException('DPay error: ' . $request->error);
 
         return new PaymentGeneratedResponse(
