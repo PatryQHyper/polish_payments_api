@@ -24,9 +24,9 @@ class SimPaySms extends SmsAbstract
         $this->apiPassword = $apiPassword;
     }
 
-    public function check(int $serviceId, int $number, string $code)
+    public function check(string $serviceId, int $number, string $code)
     {
-        $request = $this->doRequest(sprintf('https://api.simpay.pl/sms/%d', $serviceId), [
+        $request = $this->doRequest(sprintf('https://api.simpay.pl/sms/%s', $serviceId), [
             'headers' => [
                 'X-SIM-KEY' => $this->apiKey,
                 'X-SIM-PASSWORD' => $this->apiPassword
@@ -51,9 +51,9 @@ class SimPaySms extends SmsAbstract
         return true;
     }
 
-    public function getSmsNumbersToService(int $serviceId, int $page = 1, int $limit = 15)
+    public function getSmsNumbersToService(string $serviceId, int $page = 1, int $limit = 15)
     {
-        $request = $this->doRequest(sprintf('https://api.simpay.pl/sms/%d/numbers', $serviceId), [
+        $request = $this->doRequest(sprintf('https://api.simpay.pl/sms/%s/numbers', $serviceId), [
             'query' => [
                 'page' => $page,
                 'limit' => $limit,
@@ -69,9 +69,9 @@ class SimPaySms extends SmsAbstract
 
         throw new PaymentException('SimPay error:' . $request->getBody());
     }
-    public function getSmsNumberToService(int $serviceId, int $number)
+    public function getSmsNumberToService(string $serviceId, int $number)
     {
-        $request = $this->doRequest(sprintf('https://api.simpay.pl/sms/%d/numbers/%d', $serviceId, $number), [
+        $request = $this->doRequest(sprintf('https://api.simpay.pl/sms/%s/numbers/%d', $serviceId, $number), [
             'headers' => [
                 'X-SIM-KEY' => $this->apiKey,
                 'X-SIM-PASSWORD' => $this->apiPassword,
