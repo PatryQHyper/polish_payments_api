@@ -15,9 +15,6 @@ use PatryQHyper\Payments\Sms\SmsAbstract;
 
 class GetPaySms extends SmsAbstract
 {
-    private string $apiKey;
-    private string $apiSecret;
-
     private int $responseCode = 0;
     private array $responseCodes = [
         100 => 'Empty method',
@@ -32,13 +29,15 @@ class GetPaySms extends SmsAbstract
         402 => 'System error',
     ];
 
-    public function __construct(string $apiKey, string $apiSecret)
-    {
-        $this->apiKey = $apiKey;
-        $this->apiSecret = $apiSecret;
-    }
+    public function __construct(private string $apiKey, private string $apiSecret)
+    {}
 
-    public function check(string $code, int $number, bool $unlimited = false)
+    /**
+     * @throws UsedSmsCodeException
+     * @throws PaymentException
+     * @throws InvalidSmsCodeException
+     */
+    public function check(string $code, int $number, bool $unlimited = false): bool
     {
         $request = $this->doRequest('https://getpay.pl/panel/app/common/resource/ApiResource.php', [
             'json' => [
@@ -52,14 +51,17 @@ class GetPaySms extends SmsAbstract
 
         $this->responseCode = $request->infoCode;
 
-        if (!in_array($this->responseCode, [200, 400, 401]))
+        if (!in_array($this->responseCode, [200, 400, 401])) {
             throw new PaymentException(sprintf('GetPay error no. %d: %s', $this->responseCode, $this->getResponseCode()));
+        }
 
-        if ($this->responseCode == 400)
+        if ($this->responseCode == 400) {
             throw new InvalidSmsCodeException();
+        }
 
-        if ($this->responseCode == 401)
+        if ($this->responseCode == 401) {
             throw new UsedSmsCodeException();
+        }
 
         return true;
     }
