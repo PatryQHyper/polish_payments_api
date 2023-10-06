@@ -65,7 +65,7 @@ class MicrosmsPayment extends PaymentAbstract
         return $this;
     }
 
-    public function generatePayment()
+    public function generatePayment(): PaymentGeneratedResponse
     {
         $data['shopid'] = $this->shopId;
         $data['amount'] = $this->amount;
