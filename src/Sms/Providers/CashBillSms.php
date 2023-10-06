@@ -14,26 +14,31 @@ use PatryQHyper\Payments\Sms\SmsAbstract;
 
 class CashBillSms extends SmsAbstract
 {
-    private string $token;
     private int $smsNumber = 0;
 
-    public function __construct(string $token)
+    public function __construct(private string $token)
     {
-        $this->token = $token;
     }
 
-    public function check(string $code)
+    /**
+     * @throws UsedSmsCodeException
+     * @throws InvalidSmsCodeException
+     */
+    public function check(string $code): bool
     {
         $request = $this->doRequest(sprintf('https://sms.cashbill.pl/code/%s/%s', $this->token, $code), [], 'GET', false, false);
 
         $json = json_decode($request->getBody());
-        if (isset($json->error))
+        if (isset($json->error)) {
             throw new InvalidSmsCodeException();
+        }
 
-        if (!$json->active || $json->activeFrom != null)
+        if (!$json->active || $json->activeFrom != null) {
             throw new UsedSmsCodeException();
+        }
 
         $this->smsNumber = $json->number;
+
         return true;
     }
 
