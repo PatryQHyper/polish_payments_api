@@ -15,28 +15,33 @@ use PatryQHyper\Payments\Sms\SmsAbstract;
 
 class HotPaySms extends SmsAbstract
 {
-    private string $secret;
-
-    public function __construct(string $secret)
+    public function __construct(private string $secret)
     {
-        $this->secret = $secret;
     }
 
-    public function check(string $code)
+    /**
+     * @throws UsedSmsCodeException
+     * @throws PaymentException
+     * @throws InvalidSmsCodeException
+     */
+    public function check(string $code): bool
     {
         $request = $this->doRequest('https://apiv2.hotpay.pl/v1/sms/sprawdz', [
             'sekret' => $this->secret,
             'kod_sms' => $code
         ]);
 
-        if ($request->status == 'ERROR' && $request->tresc != 'BLEDNA TRESC SMS')
+        if ($request->status == 'ERROR' && $request->tresc != 'BLEDNA TRESC SMS') {
             throw new PaymentException(sprintf('HotPay error: %s', $request->tresc));
+        }
 
-        if ($request->status != 'SUKCESS')
+        if ($request->status != 'SUKCESS') {
             throw new InvalidSmsCodeException();
+        }
 
-        if ($request->aktywacja != 1)
+        if ($request->aktywacja != 1) {
             throw new UsedSmsCodeException();
+        }
 
         return true;
     }
