@@ -8,7 +8,7 @@
 
 namespace PatryQHyper\Payments\Exceptions;
 
-class InvalidSmsCodeException extends \Exception
+class InvalidSmsCodeException extends PaymentsException
 {
 
 }
