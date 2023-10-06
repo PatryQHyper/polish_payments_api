@@ -50,103 +50,106 @@ class DpayTransferPayment extends PaymentAbstract
         $this->testEnvironment = $testEnvironment;
     }
 
-    public function setAmount(float $amount)
+    public function setAmount(float $amount): DpayTransferPayment
     {
         $this->amount = $amount;
         return $this;
     }
 
-    public function setSuccessUrl(string $successUrl)
+    public function setSuccessUrl(string $successUrl): DpayTransferPayment
     {
         $this->successUrl = $successUrl;
         return $this;
     }
 
-    public function setFailUrl(string $failUrl)
+    public function setFailUrl(string $failUrl): DpayTransferPayment
     {
         $this->failUrl = $failUrl;
         return $this;
     }
 
-    public function setIpnUrl(string $ipnUrl)
+    public function setIpnUrl(string $ipnUrl): DpayTransferPayment
     {
         $this->ipnUrl = $ipnUrl;
         return $this;
     }
 
-    public function setInstallment(bool $installment)
+    public function setInstallment(bool $installment): DpayTransferPayment
     {
         $this->installment = $installment;
         return $this;
     }
 
-    public function setCreditCard(bool $creditCard)
+    public function setCreditCard(bool $creditCard): DpayTransferPayment
     {
         $this->creditCard = $creditCard;
         return $this;
     }
 
-    public function setPaysafecard(bool $paysafecard)
+    public function setPaysafecard(bool $paysafecard): DpayTransferPayment
     {
         $this->paysafecard = $paysafecard;
         return $this;
     }
 
-    public function setPaypal(bool $paypal)
+    public function setPaypal(bool $paypal): DpayTransferPayment
     {
         $this->paypal = $paypal;
         return $this;
     }
 
-    public function setNoBanks(bool $noBanks)
+    public function setNoBanks(bool $noBanks): DpayTransferPayment
     {
         $this->noBanks = $noBanks;
         return $this;
     }
 
-    public function setChannel(string $channel)
+    public function setChannel(string $channel): DpayTransferPayment
     {
         $this->channel = $channel;
         return $this;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): DpayTransferPayment
     {
         $this->email = $email;
         return $this;
     }
 
-    public function setClientName(string $clientName)
+    public function setClientName(string $clientName): DpayTransferPayment
     {
         $this->clientName = $clientName;
         return $this;
     }
 
-    public function setClientSurname(string $clientSurname)
+    public function setClientSurname(string $clientSurname): DpayTransferPayment
     {
         $this->clientSurname = $clientSurname;
         return $this;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): DpayTransferPayment
     {
         $this->description = $description;
         return $this;
     }
 
-    public function setCustom(string $custom)
+    public function setCustom(string $custom): DpayTransferPayment
     {
         $this->custom = $custom;
         return $this;
     }
 
-    public function setStyle(string $style)
+    public function setStyle(string $style): DpayTransferPayment
     {
         $this->style = $style;
         return $this;
     }
 
-    public function generatePayment()
+    /**
+     * @throws PaymentException
+     */
+    public function generatePayment(): PaymentGeneratedResponse
     {
         $array['service'] = $this->serviceName;
         $array['value'] = sprintf('%.2f', $this->amount);
@@ -192,6 +195,9 @@ class DpayTransferPayment extends PaymentAbstract
         );
     }
 
+    /**
+     * @throws PaymentException
+     */
     public function getTransactionInfo(string $transactionId)
     {
         $request = $this->doRequest(sprintf('https://panel.%s.pl/api/v1/pbl/details', ($this->testEnvironment == self::ENVIRONMENT_TEST ? 'digitalpayments' : 'dpay')), [
