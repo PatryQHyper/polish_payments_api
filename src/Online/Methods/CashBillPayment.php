@@ -120,6 +120,9 @@ class CashBillPayment extends PaymentAbstract
         return $this;
     }
 
+    /**
+     * @throws PaymentException
+     */
     public function generatePayment(): PaymentGeneratedResponse
     {
         $parameters['title'] = $this->title;
@@ -156,6 +159,9 @@ class CashBillPayment extends PaymentAbstract
         throw new PaymentException('unexpected error');
     }
 
+    /**
+     * @throws PaymentException
+     */
     public function getTransactionInfo(string $transactionId)
     {
         $request = $this->doRequest(sprintf('https://pay.cashbill.pl/%s/rest/payment/%s/%s?sign=%s', $this->testEnvironment ? 'testws' : 'ws', $this->shopId, $transactionId, sha1($transactionId . $this->shopKey)), [], 'GET', false, false);
@@ -165,6 +171,9 @@ class CashBillPayment extends PaymentAbstract
         return json_decode($request->getBody());
     }
 
+    /**
+     * @throws PaymentException
+     */
     public function setRedirectUrls(string $transactionId): bool
     {
         if (!isset($this->returnUrl) || !isset($this->negativeReturnUrl))
