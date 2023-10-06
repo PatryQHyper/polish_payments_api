@@ -15,16 +15,16 @@ use PatryQHyper\Payments\Sms\SmsAbstract;
 
 class SimPaySms extends SmsAbstract
 {
-    private string $apiKey;
-    private string $apiPassword;
-
-    public function __construct(string $apiKey, string $apiPassword)
+    public function __construct(private string $apiKey, private string $apiPassword)
     {
-        $this->apiKey = $apiKey;
-        $this->apiPassword = $apiPassword;
     }
 
-    public function check(string $serviceId, int $number, string $code)
+    /**
+     * @throws UsedSmsCodeException
+     * @throws PaymentException
+     * @throws InvalidSmsCodeException
+     */
+    public function check(string $serviceId, int $number, string $code): bool
     {
         $request = $this->doRequest(sprintf('https://api.simpay.pl/sms/%s', $serviceId), [
             'headers' => [
@@ -37,20 +37,26 @@ class SimPaySms extends SmsAbstract
             ]
         ], 'POST', false, false);
 
-        if ($request->getStatusCode() == 404)
+        if ($request->getStatusCode() == 404) {
             throw new InvalidSmsCodeException();
+        }
 
         $body = json_decode($request->getBody());
 
-        if (!isset($body->success) || !$body->success)
+        if (!isset($body->success) || !$body->success) {
             throw new PaymentException(sprintf('SimPay error: %s', $body->message));
+        }
 
-        if ($body->data->used)
+        if ($body->data->used) {
             throw new UsedSmsCodeException();
+        }
 
         return true;
     }
 
+    /**
+     * @throws PaymentException
+     */
     public function getSmsNumbersToService(string $serviceId, int $page = 1, int $limit = 15)
     {
         $request = $this->doRequest(sprintf('https://api.simpay.pl/sms/%s/numbers', $serviceId), [
@@ -69,6 +75,10 @@ class SimPaySms extends SmsAbstract
 
         throw new PaymentException('SimPay error:' . $request->getBody());
     }
+
+    /**
+     * @throws PaymentException
+     */
     public function getSmsNumberToService(string $serviceId, int $number)
     {
         $request = $this->doRequest(sprintf('https://api.simpay.pl/sms/%s/numbers/%d', $serviceId, $number), [
