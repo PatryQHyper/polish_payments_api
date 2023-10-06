@@ -28,31 +28,34 @@ class DpayDirectbillingPayment extends PaymentAbstract
         $this->secretKey = $secretKey;
     }
 
-    public function setAmount(float $amount)
+    public function setAmount(float $amount): DpayDirectbillingPayment
     {
         $this->amount = $amount;
         return $this;
     }
 
-    public function setSuccessUrl(string $successUrl)
+    public function setSuccessUrl(string $successUrl): DpayDirectbillingPayment
     {
         $this->successUrl = $successUrl;
         return $this;
     }
 
-    public function setFailUrl(string $failUrl)
+    public function setFailUrl(string $failUrl): DpayDirectbillingPayment
     {
         $this->failUrl = $failUrl;
         return $this;
     }
 
-    public function setCustom(string $custom)
+    public function setCustom(string $custom): DpayDirectbillingPayment
     {
         $this->custom = $custom;
         return $this;
     }
 
-    public function generatePayment()
+    /**
+     * @throws PaymentException
+     */
+    public function generatePayment(): PaymentGeneratedResponse
     {
         $array['guid'] = $this->guid;
         $array['value'] = $this->amount * 100;
