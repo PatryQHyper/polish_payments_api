@@ -194,6 +194,9 @@ class Przelewy24Payment extends PaymentAbstract
         return $this;
     }
 
+    /**
+     * @throws PaymentException
+     */
     public function generatePayment(): PaymentGeneratedResponse
     {
         $array['merchantId'] = $this->merchantId;
@@ -249,6 +252,9 @@ class Przelewy24Payment extends PaymentAbstract
         );
     }
 
+    /**
+     * @throws PaymentException
+     */
     public function verifyTransaction(int $orderId): bool
     {
         $array['merchantId'] = $this->merchantId;

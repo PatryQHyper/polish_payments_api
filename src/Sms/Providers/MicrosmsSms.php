@@ -15,16 +15,16 @@ use PatryQHyper\Payments\Sms\SmsAbstract;
 
 class MicrosmsSms extends SmsAbstract
 {
-    private int $userId;
-    private int $serviceId;
-
-    public function __construct(int $userId, int $serviceId)
+    public function __construct(private int $userId, private int $serviceId)
     {
-        $this->userId = $userId;
-        $this->serviceId = $serviceId;
     }
 
-    public function check($code, int $number)
+    /**
+     * @throws UsedSmsCodeException
+     * @throws PaymentException
+     * @throws InvalidSmsCodeException
+     */
+    public function check($code, int $number): bool
     {
         $request = $this->doRequest('https://microsms.pl/api/v2/index.php', [
             'userid' => $this->userId,
@@ -33,17 +33,21 @@ class MicrosmsSms extends SmsAbstract
             'number' => $number
         ]);
 
-        if(isset($request->error))
+        if (isset($request->error)) {
             throw new PaymentException(sprintf('Microsms error no %d: %s', $request->error->errorCode, $request->error->message));
+        }
 
-        if (!$request->connect && $request->data->errorCode != 1)
+        if (!$request->connect && $request->data->errorCode != 1) {
             throw new PaymentException(sprintf('Microsms error no %d: %s', $request->data->errorCode, $request->data->message));
+        }
 
-        if (isset($request->data->errorCode) && $request->data->errorCode == 1)
+        if (isset($request->data->errorCode) && $request->data->errorCode == 1) {
             throw new InvalidSmsCodeException();
+        }
 
-        if ($request->data->status != 1)
+        if ($request->data->status != 1) {
             throw new UsedSmsCodeException();
+        }
 
         return true;
     }

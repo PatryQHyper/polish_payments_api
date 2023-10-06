@@ -273,7 +273,7 @@ class DotPayPayment extends PaymentAbstract
         return $this;
     }
 
-    public function generatePayment()
+    public function generatePayment(): PaymentGeneratedResponse
     {
         $array['api_version'] = 'next';
         $array['id'] = $this->shopId;
@@ -367,7 +367,7 @@ class DotPayPayment extends PaymentAbstract
         );
     }
 
-    private function generateChk(array $array)
+    private function generateChk(array $array): string
     {
         ksort($array);
         $array['paramsList'] = implode(';', array_keys($array));

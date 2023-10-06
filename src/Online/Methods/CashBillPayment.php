@@ -42,84 +42,87 @@ class CashBillPayment extends PaymentAbstract
         $this->testEnvironment = $environment;
     }
 
-    public function setAmount(float $amount)
+    public function setAmount(float $amount): CashBillPayment
     {
         $this->amount = $amount;
         return $this;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): CashBillPayment
     {
         $this->title = $title;
         return $this;
     }
 
-    public function setAdditionalData(string $additionalData)
+    public function setAdditionalData(string $additionalData): CashBillPayment
     {
         $this->additionalData = $additionalData;
         return $this;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): CashBillPayment
     {
         $this->description = $description;
         return $this;
     }
 
-    public function setReturnUrl(string $returnUrl)
+    public function setReturnUrl(string $returnUrl): CashBillPayment
     {
         $this->returnUrl = $returnUrl;
         return $this;
     }
 
-    public function setNegativeReturnUrl(string $negativeReturnUrl)
+    public function setNegativeReturnUrl(string $negativeReturnUrl): CashBillPayment
     {
         $this->negativeReturnUrl = $negativeReturnUrl;
         return $this;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): CashBillPayment
     {
         $this->email = $email;
         return $this;
     }
 
-    public function setPaymentChannel(string $paymentChannel)
+    public function setPaymentChannel(string $paymentChannel): CashBillPayment
     {
         $this->paymentChannel = $paymentChannel;
         return $this;
     }
 
-    public function setFirstname(string $firstname)
+    public function setFirstname(string $firstname): CashBillPayment
     {
         $this->firstname = $firstname;
         return $this;
     }
 
-    public function setSurname(string $surname)
+    public function setSurname(string $surname): CashBillPayment
     {
         $this->surname = $surname;
         return $this;
     }
 
-    public function setLanguage(string $language)
+    public function setLanguage(string $language): CashBillPayment
     {
         $this->language = $language;
         return $this;
     }
 
-    public function setCurrency(string $currency)
+    public function setCurrency(string $currency): CashBillPayment
     {
         $this->currency = $currency;
         return $this;
     }
 
-    public function setReferer(string $referer)
+    public function setReferer(string $referer): CashBillPayment
     {
         $this->referer = $referer;
         return $this;
     }
 
+    /**
+     * @throws PaymentException
+     */
     public function generatePayment(): PaymentGeneratedResponse
     {
         $parameters['title'] = $this->title;
@@ -156,6 +159,9 @@ class CashBillPayment extends PaymentAbstract
         throw new PaymentException('unexpected error');
     }
 
+    /**
+     * @throws PaymentException
+     */
     public function getTransactionInfo(string $transactionId)
     {
         $request = $this->doRequest(sprintf('https://pay.cashbill.pl/%s/rest/payment/%s/%s?sign=%s', $this->testEnvironment ? 'testws' : 'ws', $this->shopId, $transactionId, sha1($transactionId . $this->shopKey)), [], 'GET', false, false);
@@ -165,6 +171,9 @@ class CashBillPayment extends PaymentAbstract
         return json_decode($request->getBody());
     }
 
+    /**
+     * @throws PaymentException
+     */
     public function setRedirectUrls(string $transactionId): bool
     {
         if (!isset($this->returnUrl) || !isset($this->negativeReturnUrl))

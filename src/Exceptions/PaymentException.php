@@ -8,7 +8,7 @@
 
 namespace PatryQHyper\Payments\Exceptions;
 
-class PaymentException extends \Exception
+class PaymentException extends PaymentsException
 {
 
 }
