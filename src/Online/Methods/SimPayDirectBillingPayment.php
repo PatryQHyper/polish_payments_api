@@ -84,7 +84,10 @@ class SimPayDirectBillingPayment extends PaymentAbstract
         return $this;
     }
 
-    public function generatePayment()
+    /**
+     * @throws PaymentException
+     */
+    public function generatePayment(): PaymentGeneratedResponse
     {
         $array['amount'] = $this->amount;
         $array['amountType'] = $this->amountType;
@@ -115,7 +118,7 @@ class SimPayDirectBillingPayment extends PaymentAbstract
         );
     }
 
-    private function getPaymentSignature()
+    private function getPaymentSignature(): string
     {
         $array[] = $this->amount;
         $array[] = $this->amountType;
