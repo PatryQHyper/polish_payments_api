@@ -138,7 +138,10 @@ class IMojePayment extends PaymentAbstract
         return $this;
     }
 
-    public function generatePayment()
+    /**
+     * @throws PaymentException
+     */
+    public function generatePayment(): PaymentGeneratedResponse
     {
         $payload['serviceId'] = $this->serviceId;
         $payload['amount'] = $this->amount;
@@ -185,6 +188,9 @@ class IMojePayment extends PaymentAbstract
         throw new PaymentException(sprintf('iMoje error [%s]: %s', $request->getStatusCode(), $request->getBody()));
     }
 
+    /**
+     * @throws PaymentException
+     */
     public function getTransactionInfo(string $transactionId) {
         $request = $this->doRequest(sprintf('%s/%s/transactions/%s', $this->iMojeUrl, $this->merchantId, $transactionId), [
             'headers' => [
