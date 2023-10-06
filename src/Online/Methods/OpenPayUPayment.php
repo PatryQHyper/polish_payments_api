@@ -57,7 +57,10 @@ class OpenPayUPayment extends PaymentAbstract
             $this->openPayUUrl = 'https://secure.snd.payu.com';
     }
 
-    public function oauthAuthorize()
+    /**
+     * @throws PaymentException
+     */
+    public function oauthAuthorize(): void
     {
         $request = $this->doRequest($this->openPayUUrl . '/pl/standard/oauth/authorize', [
             'form_params' => [
@@ -79,25 +82,25 @@ class OpenPayUPayment extends PaymentAbstract
         return $this->oauthToken;
     }
 
-    public function setProductName(string $productName)
+    public function setProductName(string $productName): OpenPayUPayment
     {
         $this->productName = $productName;
         return $this;
     }
 
-    public function setProductUnitPrice(float $price)
+    public function setProductUnitPrice(float $price): OpenPayUPayment
     {
         $this->productUnitPrice = $price * 100;
         return $this;
     }
 
-    public function setProductQuantity(int $quantity)
+    public function setProductQuantity(int $quantity): OpenPayUPayment
     {
         $this->productQuantity = $quantity;
         return $this;
     }
 
-    public function addProduct()
+    public function addProduct(): void
     {
         $this->products[] = [
             'name' => $this->productName,
@@ -108,31 +111,31 @@ class OpenPayUPayment extends PaymentAbstract
         $this->totalPrice += $this->productUnitPrice;
     }
 
-    public function setBuyerEmail(string $email)
+    public function setBuyerEmail(string $email): OpenPayUPayment
     {
         $this->buyer['email'] = $email;
         return $this;
     }
 
-    public function setBuyerLanguage(string $language)
+    public function setBuyerLanguage(string $language): OpenPayUPayment
     {
         $this->buyer['language'] = $language;
         return $this;
     }
 
-    public function setBuyerPhone(string $phone)
+    public function setBuyerPhone(string $phone): OpenPayUPayment
     {
         $this->buyer['phone'] = $phone;
         return $this;
     }
 
-    public function setBuyerFirstname(string $firstname)
+    public function setBuyerFirstname(string $firstname): OpenPayUPayment
     {
         $this->buyer['firstName'] = $firstname;
         return $this;
     }
 
-    public function setBuyerLastname(string $lastname)
+    public function setBuyerLastname(string $lastname): OpenPayUPayment
     {
         $this->buyer['lastName'] = $lastname;
         return $this;
@@ -180,7 +183,10 @@ class OpenPayUPayment extends PaymentAbstract
         return $this;
     }
 
-    public function generatePayment()
+    /**
+     * @throws PaymentException
+     */
+    public function generatePayment(): PaymentGeneratedResponse
     {
         $array['merchantPosId'] = $this->posId;
         $array['notifyUrl'] = $this->notifyUrl;
