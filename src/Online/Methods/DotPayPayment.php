@@ -319,7 +319,7 @@ class DotPayPayment extends PaymentAbstract
         $array['chk'] = $this->generateChk($array);
 
         return new PaymentGeneratedResponse(
-            sprintf('https://ssl.dotpay.pl/%s/?%s', ($this->useSandbox ? 'test_payment' : 't2'), http_build_query($array))
+            sprintf('https://dproxy.przelewy24.pl/%s/?%s', ($this->useSandbox ? 'test_payment' : 't2'), http_build_query($array))
         );
     }
 
