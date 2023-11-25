@@ -7,7 +7,7 @@ Full docs can be found here https://patryqhyper.gitbook.io/polish_payments_api/.
 ## Installation
 Installation via Composer:
 ```
-composer require patryqhyper/polish_payments_api:^3.0
+composer require patryqhyper/polish_payments_api:
 ```
 
 ## Supported providers:
