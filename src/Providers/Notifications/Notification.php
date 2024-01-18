@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (wizjoner.dev)
- * Date: 31.03.2023 22:48
- */
-
 namespace PatryQHyper\Payments\Providers\Notifications;
 
 use PatryQHyper\Payments\Exceptions\NotificationException;

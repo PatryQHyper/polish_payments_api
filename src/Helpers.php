@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (wizjoner.dev)
- * Date: 21.03.2023 13:47
- */
-
 namespace PatryQHyper\Payments;
 
 use GuzzleHttp\Client;

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (wizjoner.dev)
- * Date: 01.04.2023 13:44
- */
-
 namespace PatryQHyper\Payments\Providers;
 
 use PatryQHyper\Payments\Exceptions\GeneratePaymentException;

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (wizjoner.dev)
- * Date: 01.04.2023 18:31
- */
-
 namespace PatryQHyper\Payments\Providers\Setters;
 
 use PatryQHyper\Payments\Providers\Notifications\Notification;

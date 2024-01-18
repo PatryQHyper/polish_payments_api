@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (wizjoner.dev)
- * Date: 21.03.2023 13:56
- */
-
 namespace PatryQHyper\Payments\Responses;
 
 class PaymentGeneratedResponse

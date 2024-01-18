@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (wizjoner.dev)
- * Date: 01.04.2023 19:07
- */
-
 namespace PatryQHyper\Payments\Providers\Notifications;
 
 class HotPayNotification extends Notification

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (wizjoner.dev)
- * Date: 21.03.2023 13:46
- */
-
 namespace PatryQHyper\Payments;
 
 use PatryQHyper\Payments\Providers\Provider;

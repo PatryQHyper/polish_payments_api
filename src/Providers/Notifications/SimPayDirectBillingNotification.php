@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (wizjoner.dev)
- * Date: 01.04.2023 14:11
- */
-
 namespace PatryQHyper\Payments\Providers\Notifications;
 
 class SimPayDirectBillingNotification extends Notification
