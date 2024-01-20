@@ -1,11 +1,9 @@
 <?php
 
-namespace PatryQHyper\Payments\Providers\Setters;
-
-use PatryQHyper\Payments\Providers\Miscellaneous\CashBill\AbstractEnvironment;
+namespace PatryQHyper\Payments\Providers\CashBill;
 use PatryQHyper\Payments\Providers\Provider;
 
-abstract class CashBillSetters extends Provider
+abstract class Setters extends Provider
 {
     protected float $amount;
     protected string $title;
@@ -21,79 +19,79 @@ abstract class CashBillSetters extends Provider
     protected string $currency = 'PLN';
     protected string $referer;
 
-    public function setAmount(float $amount): CashBillSetters
+    public function setAmount(float $amount): Setters
     {
         $this->amount = $amount;
         return $this;
     }
 
-    public function setTitle(string $title): CashBillSetters
+    public function setTitle(string $title): Setters
     {
         $this->title = $title;
         return $this;
     }
 
-    public function setAdditionalData(string $additionalData): CashBillSetters
+    public function setAdditionalData(string $additionalData): Setters
     {
         $this->additionalData = $additionalData;
         return $this;
     }
 
-    public function setDescription(string $description): CashBillSetters
+    public function setDescription(string $description): Setters
     {
         $this->description = $description;
         return $this;
     }
 
-    public function setReturnUrl(string $returnUrl): CashBillSetters
+    public function setReturnUrl(string $returnUrl): Setters
     {
         $this->returnUrl = $returnUrl;
         return $this;
     }
 
-    public function setNegativeReturnUrl(string $negativeReturnUrl): CashBillSetters
+    public function setNegativeReturnUrl(string $negativeReturnUrl): Setters
     {
         $this->negativeReturnUrl = $negativeReturnUrl;
         return $this;
     }
 
-    public function setEmail(string $email): CashBillSetters
+    public function setEmail(string $email): Setters
     {
         $this->email = $email;
         return $this;
     }
 
-    public function setPaymentChannel(string $paymentChannel): CashBillSetters
+    public function setPaymentChannel(string $paymentChannel): Setters
     {
         $this->paymentChannel = $paymentChannel;
         return $this;
     }
 
-    public function setFirstname(string $firstname): CashBillSetters
+    public function setFirstname(string $firstname): Setters
     {
         $this->firstname = $firstname;
         return $this;
     }
 
-    public function setSurname(string $surname): CashBillSetters
+    public function setSurname(string $surname): Setters
     {
         $this->surname = $surname;
         return $this;
     }
 
-    public function setLanguage(string $language): CashBillSetters
+    public function setLanguage(string $language): Setters
     {
         $this->language = $language;
         return $this;
     }
 
-    public function setCurrency(string $currency): CashBillSetters
+    public function setCurrency(string $currency): Setters
     {
         $this->currency = $currency;
         return $this;
     }
 
-    public function setReferer(string $referer): CashBillSetters
+    public function setReferer(string $referer): Setters
     {
         $this->referer = $referer;
         return $this;

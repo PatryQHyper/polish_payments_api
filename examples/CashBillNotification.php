@@ -10,8 +10,8 @@ require 'base.php';
 const SHOP_ID = '';
 const SHOP_KEY = '';
 
-$cashbill = $polishPaymentsApi->online(new \PatryQHyper\Payments\Providers\CashBill(SHOP_ID, SHOP_KEY, new \PatryQHyper\Payments\Providers\Miscellaneous\CashBill\TestEnvironment()));
+$cashbill = $polishPaymentsApi->online(new \PatryQHyper\Payments\Providers\CashBillProvider(SHOP_ID, SHOP_KEY, new \PatryQHyper\Payments\Providers\Miscellaneous\CashBill\TestEnvironment()));
 
-/** @var \PatryQHyper\Payments\Providers\CashBill $cashbill */
+/** @var \PatryQHyper\Payments\Providers\CashBillProvider $cashbill */
 $ipn = $cashbill->handleNotification($_GET);
 print_r($ipn);

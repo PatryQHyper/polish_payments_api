@@ -3,10 +3,10 @@
 namespace PatryQHyper\Payments\Providers\Setters;
 
 use PatryQHyper\Payments\Providers\Notifications\Notification;
-use PatryQHyper\Payments\Providers\Provider;
+use PatryQHyper\Payments\Providers\CashBillProvider;
 use PatryQHyper\Payments\Responses\PaymentGeneratedResponse;
 
-abstract class HotPaySetters extends Provider
+abstract class HotPaySetters extends CashBillProvider
 {
     protected float $amount;
     protected string $description;

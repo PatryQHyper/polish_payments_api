@@ -2,9 +2,9 @@
 
 namespace PatryQHyper\Payments\Providers\Setters;
 
-use PatryQHyper\Payments\Providers\Provider;
+use PatryQHyper\Payments\Providers\CashBillProvider;
 
-abstract class SimPayDirectBillingSetters extends Provider
+abstract class SimPayDirectBillingSetters extends CashBillProvider
 {
     protected float $amount;
     protected string $amountType = 'gross';

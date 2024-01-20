@@ -1,22 +1,20 @@
 <?php
 
-namespace PatryQHyper\Payments\Providers;
+namespace PatryQHyper\Payments\Providers\CashBill;
 
 use PatryQHyper\Payments\Exceptions\GeneratePaymentException;
 use PatryQHyper\Payments\Exceptions\PolishPaymentsApiException;
-use PatryQHyper\Payments\Providers\Miscellaneous\CashBill\AbstractEnvironment;
-use PatryQHyper\Payments\Providers\Miscellaneous\CashBill\ProductionEnvironment;
 use PatryQHyper\Payments\Providers\Notifications\CashBillNotification;
 use PatryQHyper\Payments\Providers\Notifications\Notification;
-use PatryQHyper\Payments\Providers\Setters\CashBillSetters;
+use PatryQHyper\Payments\Responses\CashBillTransactionDetails;
 use PatryQHyper\Payments\Responses\PaymentGeneratedResponse;
 
-class CashBill extends CashBillSetters
+class CashBillProvider extends Setters
 {
     public function __construct(
-        private string              $shopId,
-        private string              $shopKey,
-        private AbstractEnvironment $environment = new ProductionEnvironment(),
+        private readonly string      $shopId,
+        private readonly string      $shopKey,
+        private readonly Environment $environment = Environment::PRODUCTION,
     )
     {
     }
@@ -99,10 +97,10 @@ class CashBill extends CashBillSetters
             ],
         ]);
 
-        if($request->getStatusCode() != 200) {
+        if ($request->getStatusCode() != 200) {
             throw new PolishPaymentsApiException(sprintf('CashBill error: %s', $request->getBody()));
         }
 
-        return json_decode($request->getBody());
+        return new CashBillTransactionDetails(json_decode($request->getBody(), true));
     }
 }
