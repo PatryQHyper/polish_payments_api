@@ -18,5 +18,5 @@ abstract class Provider extends Helpers
     /**
      * @throws NotificationException
      */
-    abstract public function handleNotification(object|array $payload): Notification;
+    abstract public function validateIPN(object|array $payload): Notification;
 }

@@ -78,7 +78,7 @@ class CashBillProvider extends Setters
         throw new GeneratePaymentException(sprintf('unexpected error (id or redirectUrl dont exist): %s', $request->getBody()));
     }
 
-    public function handleNotification(object|array $payload): Notification
+    public function validateIPN(object|array $payload): Notification
     {
         return (new CashBillNotification($payload, [
             'shopId' => $this->shopId,
