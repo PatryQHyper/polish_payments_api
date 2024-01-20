@@ -4,8 +4,7 @@ namespace PatryQHyper\Payments\Providers\CashBill;
 
 use PatryQHyper\Payments\Exceptions\GeneratePaymentException;
 use PatryQHyper\Payments\Exceptions\PolishPaymentsApiException;
-use PatryQHyper\Payments\Providers\Notifications\CashBillNotification;
-use PatryQHyper\Payments\Providers\Notifications\Notification;
+use PatryQHyper\Payments\Providers\Notification;
 use PatryQHyper\Payments\Responses\CashBillTransactionDetails;
 use PatryQHyper\Payments\Responses\PaymentGeneratedResponse;
 

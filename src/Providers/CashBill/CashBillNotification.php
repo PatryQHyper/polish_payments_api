@@ -1,6 +1,8 @@
 <?php
 
-namespace PatryQHyper\Payments\Providers\Notifications;
+namespace PatryQHyper\Payments\Providers\CashBill;
+
+use PatryQHyper\Payments\Providers\Notification;
 
 class CashBillNotification extends Notification
 {

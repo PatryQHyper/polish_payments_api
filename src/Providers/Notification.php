@@ -1,6 +1,6 @@
 <?php
 
-namespace PatryQHyper\Payments\Providers\Notifications;
+namespace PatryQHyper\Payments\Providers;
 
 use PatryQHyper\Payments\Exceptions\NotificationException;
 
