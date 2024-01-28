@@ -21,8 +21,9 @@ class PaymentGeneratedResponse
         }
 
         $form = '<form id="polishpaymentsapi_form" method="' . $this->formMethod . '" action="' . $this->url . '">';
-        foreach ($this->formParams as $key => $value)
+        foreach ($this->formParams as $key => $value) {
             $form .= '<input type="hidden" name="' . $key . '" value="' . $value . '">';
+        }
         $form .= '<button type="submit" id="polishpaymentsapi_button">Jeśli nie nastąpi przekierowanie, naciśnij tutaj</button></form><script>document.getElementById("polishpaymentsapi_form").submit();</script>';
 
         return $form;
