@@ -15,6 +15,8 @@ use PatryQHyper\Payments\Sms\SmsAbstract;
 
 class SimPaySms extends SmsAbstract
 {
+    private ?string $msisdn = null;
+    
     public function __construct(private string $apiKey, private string $apiPassword)
     {
     }
@@ -50,6 +52,8 @@ class SimPaySms extends SmsAbstract
         if ($body->data->used) {
             throw new UsedSmsCodeException();
         }
+
+        $this->msisdn = $body->data->from;
 
         return true;
     }
@@ -92,5 +96,10 @@ class SimPaySms extends SmsAbstract
         }
 
         throw new PaymentException('SimPay error:' . $request->getBody());
+    }
+
+    public function getMsisdn()
+    {
+        return $this->msisdn;
     }
 }
