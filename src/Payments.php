@@ -8,7 +8,7 @@ use PatryQHyper\Payments\Sms\SmsAbstract;
 
 class Payments
 {
-    public const version = '3.0.16';
+    public const version = '3.0.17';
 
     private ?PaymentAbstract $paymentAbstract = null;
     private ?SmsAbstract $smsAbstract = null;
