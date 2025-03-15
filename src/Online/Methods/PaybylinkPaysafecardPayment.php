@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (patryqhyper.pl)
- * Date: 16.05.2022 23:19
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
 use PatryQHyper\Payments\Exceptions\PaymentException;
@@ -16,7 +10,7 @@ class PaybylinkPaysafecardPayment extends PaymentAbstract
 {
     private int $userId;
     private int $shopId;
-    private string $hash;
+    private string $pin;
 
     private float $amount;
     private string $redirectSuccessUrl;
@@ -32,43 +26,43 @@ class PaybylinkPaysafecardPayment extends PaymentAbstract
         $this->pin = $pin;
     }
 
-    public function setAmount(float $amount)
+    public function setAmount(float $amount): self
     {
         $this->amount = $amount;
         return $this;
     }
 
-    public function setRedirectSuccessUrl(string $redirectSuccessUrl)
+    public function setRedirectSuccessUrl(string $redirectSuccessUrl): self
     {
         $this->redirectSuccessUrl = $redirectSuccessUrl;
         return $this;
     }
 
-    public function setRedirectFailUrl(string $redirectFailUrl)
+    public function setRedirectFailUrl(string $redirectFailUrl): self
     {
         $this->redirectFailUrl = $redirectFailUrl;
         return $this;
     }
 
-    public function setNotifyUrl(string $notifyUrl)
+    public function setNotifyUrl(string $notifyUrl): self
     {
         $this->notifyUrl = $notifyUrl;
         return $this;
     }
 
-    public function setControl(string $control)
+    public function setControl(string $control): self
     {
         $this->control = $control;
         return $this;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
         return $this;
     }
 
-    public function generatePayment()
+    public function generatePayment(): PaymentGeneratedResponse
     {
         $data = [
             'userid' => $this->userId,
@@ -79,21 +73,25 @@ class PaybylinkPaysafecardPayment extends PaymentAbstract
             'url' => $this->notifyUrl,
             'control' => $this->control,
             'hash' => hash('sha256', $this->userId . $this->pin . $this->amount),
-            'get_pid' => true
+            'get_pid' => true,
         ];
 
-        if (isset($this->description)) $data['description'] = $this->description;
+        if (isset($this->description)) {
+            $data['description'] = $this->description;
+        }
 
         $request = $this->doRequest('https://paybylink.pl/api/psc/', [
             'form_params' => $data
         ], 'POST', false, false);
 
         $json = @json_decode($request->getBody());
-        if (!$json)
+        if (!$json) {
             throw new PaymentException('Paybylink error: ' . $request->getBody());
+        }
 
-        if (!$json->status)
+        if (!$json->status) {
             throw new PaymentException('Paybylink error: ' . $json->message);
+        }
 
         return new PaymentGeneratedResponse(
             'https://paybylink.pl/pay/' . $json->pid,

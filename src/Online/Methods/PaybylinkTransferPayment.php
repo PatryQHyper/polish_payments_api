@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (patryqhyper.pl)
- * Date: 16.05.2022 22:57
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
 use PatryQHyper\Payments\Exceptions\PaymentException;
@@ -33,55 +27,55 @@ class PaybylinkTransferPayment extends PaymentAbstract
         $this->hash = $hash;
     }
 
-    public function setAmount(float $amount)
+    public function setAmount(float $amount): self
     {
         $this->amount = $amount;
         return $this;
     }
 
-    public function setControl(string $control)
+    public function setControl(string $control): self
     {
         $this->control = $control;
         return $this;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
         return $this;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
         return $this;
     }
 
-    public function setNotifyUrl(string $notifyUrl)
+    public function setNotifyUrl(string $notifyUrl): self
     {
         $this->notifyUrl = $notifyUrl;
         return $this;
     }
 
-    public function setReturnUrlSuccess(string $returnUrlSuccess)
+    public function setReturnUrlSuccess(string $returnUrlSuccess): self
     {
         $this->returnUrlSuccess = $returnUrlSuccess;
         return $this;
     }
 
-    public function setReturnUrlSuccessTidPass(bool $returnUrlSuccessTidPass)
+    public function setReturnUrlSuccessTidPass(bool $returnUrlSuccessTidPass): self
     {
         $this->returnUrlSuccessTidPass = $returnUrlSuccessTidPass;
         return $this;
     }
 
-    public function setHideReceiver(bool $hideReceiver)
+    public function setHideReceiver(bool $hideReceiver): self
     {
         $this->hideReceiver = $hideReceiver;
         return $this;
     }
 
-    public function setCustomFinishNote(string $customFinishNote)
+    public function setCustomFinishNote(string $customFinishNote): self
     {
         $this->customFinishNote = $customFinishNote;
         return $this;
@@ -91,21 +85,45 @@ class PaybylinkTransferPayment extends PaymentAbstract
     {
         $params['shopId'] = $this->shopId;
         $params['price'] = sprintf('%.2f', $this->amount);
-        if (isset($this->control)) $params['control'] = $this->control;
-        if (isset($this->description)) $params['description'] = $this->description;
-        if (isset($this->email)) $params['email'] = $this->email;
-        if (isset($this->notifyUrl)) $params['notifyURL'] = $this->notifyUrl;
-        if (isset($this->returnUrlSuccess)) $params['returnUrlSuccess'] = $this->returnUrlSuccess;
-        if (isset($this->returnUrlSuccessTidPass)) $params['returnUrlSuccessTidPass'] = $this->returnUrlSuccessTidPass;
-        if (isset($this->hideReceiver)) $params['hideReceiver'] = $this->hideReceiver;
-        if (isset($this->customFinishNote)) $params['customFinishNote'] = $this->customFinishNote;
+        if (isset($this->control)) {
+            $params['control'] = $this->control;
+        }
+
+        if (isset($this->description)) {
+            $params['description'] = $this->description;
+        }
+
+        if (isset($this->email)) {
+            $params['email'] = $this->email;
+        }
+
+        if (isset($this->notifyUrl)) {
+            $params['notifyURL'] = $this->notifyUrl;
+        }
+
+        if (isset($this->returnUrlSuccess)) {
+            $params['returnUrlSuccess'] = $this->returnUrlSuccess;
+        }
+
+        if (isset($this->returnUrlSuccessTidPass)) {
+            $params['returnUrlSuccessTidPass'] = $this->returnUrlSuccessTidPass;
+        }
+
+        if (isset($this->hideReceiver)) {
+            $params['hideReceiver'] = $this->hideReceiver;
+        }
+
+        if (isset($this->customFinishNote)) {
+            $params['customFinishNote'] = $this->customFinishNote;
+        }
+
         $params['signature'] = hash('sha256', $this->hash . '|' . implode('|', $params));
 
         $request = $this->doRequest('https://secure.pbl.pl/api/v1/transfer/generate', [
             'json' => $params
         ], 'POST', false, false);
 
-        if ($request->getStatusCode() != 200)
+        if ($request->getStatusCode() !== 200)
             throw new PaymentException('Paybylink error: ' . $request->getBody());
 
         $json = json_decode($request->getBody());
