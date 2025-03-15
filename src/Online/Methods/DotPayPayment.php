@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (patryqhyper.pl)
- * Date: 20.05.2022 22:00
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
 use PatryQHyper\Payments\Online\PaymentAbstract;
@@ -56,7 +50,7 @@ class DotPayPayment extends PaymentAbstract
     private string $gpToken;
     private string $apToken;
 
-    public function __construct(int $shopId, string $pin, bool $useSandbox)
+    public function __construct(int $shopId, string $pin, bool $useSandbox = self::ENVIRONMENT_PRODUCTION)
     {
         $this->shopId = $shopId;
         $this->pin = $pin;
@@ -280,38 +274,133 @@ class DotPayPayment extends PaymentAbstract
         $array['amount'] = $this->amount;
         $array['currency'] = $this->currency;
         $array['description'] = $this->description;
-        if (isset($this->channel)) $array['channel'] = $this->channel;
-        if (isset($this->chLock)) $array['ch_lock'] = $this->chLock;
-        if (isset($this->ignoreLastPaymentChannel)) $array['ignore_last_payment_channel'] = $this->ignoreLastPaymentChannel;
-        if (isset($this->channelGroups)) $array['channel_groups'] = $this->channelGroups;
-        if (isset($this->redirectUrl)) $array['url'] = $this->redirectUrl;
-        if (isset($this->type)) $array['type'] = $this->type;
-        if (isset($this->buttonText)) $array['buttontext'] = $this->buttonText;
-        if (isset($this->byLaw)) $array['bylaw'] = $this->byLaw;
-        if (isset($this->personalData)) $array['personal_data'] = $this->personalData;
-        if (isset($this->urlc)) $array['urlc'] = $this->urlc;
-        if (isset($this->expirationDate)) $array['expirationDate'] = $this->expirationDate;
-        if (isset($this->control)) $array['control'] = $this->control;
-        if (isset($this->firstname)) $array['firstname'] = $this->firstname;
-        if (isset($this->lastname)) $array['lastname'] = $this->lastname;
-        if (isset($this->email)) $array['email'] = $this->email;
-        if (isset($this->street)) $array['street'] = $this->street;
-        if (isset($this->streetN1)) $array['street_n1'] = $this->streetN1;
-        if (isset($this->streetN2)) $array['street_n2'] = $this->streetN2;
-        if (isset($this->state)) $array['state'] = $this->state;
-        if (isset($this->addr3)) $array['addr3'] = $this->addr3;
-        if (isset($this->city)) $array['city'] = $this->city;
-        if (isset($this->postCode)) $array['postcode'] = $this->postCode;
-        if (isset($this->phone)) $array['phone'] = $this->phone;
-        if (isset($this->country)) $array['country'] = $this->country;
-        if (isset($this->lang)) $array['lang'] = $this->lang;
-        if (isset($this->customer)) $array['customer'] = $this->customer;
-        if (isset($this->deliveryAddress)) $array['deladdr'] = $this->deliveryAddress;
-        if (isset($this->pInfo)) $array['p_info'] = $this->pInfo;
-        if (isset($this->pEmail)) $array['p_email'] = $this->pEmail;
-        if (isset($this->blikCode)) $array['blik_code'] = $this->blikCode;
-        if (isset($this->gpToken)) $array['gp_token'] = $this->gpToken;
-        if (isset($this->apToken)) $array['ap_token'] = $this->apToken;
+        if (isset($this->channel)) {
+            $array['channel'] = $this->channel;
+        }
+
+        if (isset($this->chLock)) {
+            $array['ch_lock'] = $this->chLock;
+        }
+
+        if (isset($this->ignoreLastPaymentChannel)) {
+            $array['ignore_last_payment_channel'] = $this->ignoreLastPaymentChannel;
+        }
+
+        if (isset($this->channelGroups)) {
+            $array['channel_groups'] = $this->channelGroups;
+        }
+
+        if (isset($this->redirectUrl)) {
+            $array['url'] = $this->redirectUrl;
+        }
+
+        if (isset($this->type)) {
+            $array['type'] = $this->type;
+        }
+
+        if (isset($this->buttonText)) {
+            $array['buttontext'] = $this->buttonText;
+        }
+
+        if (isset($this->byLaw)) {
+            $array['bylaw'] = $this->byLaw;
+        }
+
+        if (isset($this->personalData)) {
+            $array['personal_data'] = $this->personalData;
+        }
+
+        if (isset($this->urlc)) {
+            $array['urlc'] = $this->urlc;
+        }
+
+        if (isset($this->expirationDate)) {
+            $array['expirationDate'] = $this->expirationDate;
+        }
+
+        if (isset($this->control)) {
+            $array['control'] = $this->control;
+        }
+
+        if (isset($this->firstname)) {
+            $array['firstname'] = $this->firstname;
+        }
+
+        if (isset($this->lastname)) {
+            $array['lastname'] = $this->lastname;
+        }
+
+        if (isset($this->email)) {
+            $array['email'] = $this->email;
+        }
+
+        if (isset($this->street)) {
+            $array['street'] = $this->street;
+        }
+
+        if (isset($this->streetN1)) {
+            $array['street_n1'] = $this->streetN1;
+        }
+
+        if (isset($this->streetN2)) {
+            $array['street_n2'] = $this->streetN2;
+        }
+
+        if (isset($this->state)) {
+            $array['state'] = $this->state;
+        }
+
+        if (isset($this->addr3)) {
+            $array['addr3'] = $this->addr3;
+        }
+
+        if (isset($this->city)) {
+            $array['city'] = $this->city;
+        }
+
+        if (isset($this->postCode)) {
+            $array['postcode'] = $this->postCode;
+        }
+
+        if (isset($this->phone)) {
+            $array['phone'] = $this->phone;
+        }
+
+        if (isset($this->country)) {
+            $array['country'] = $this->country;
+        }
+
+        if (isset($this->lang)) {
+            $array['lang'] = $this->lang;
+        }
+
+        if (isset($this->customer)) {
+            $array['customer'] = $this->customer;
+        }
+
+        if (isset($this->deliveryAddress)) {
+            $array['deladdr'] = $this->deliveryAddress;
+        }
+
+        if (isset($this->pInfo)) {
+            $array['p_info'] = $this->pInfo;
+        }
+
+        if (isset($this->pEmail)) {
+            $array['p_email'] = $this->pEmail;
+        }
+
+        if (isset($this->blikCode)) {
+            $array['blik_code'] = $this->blikCode;
+        }
+
+        if (isset($this->gpToken)) {
+            $array['gp_token'] = $this->gpToken;
+        }
+
+        if (isset($this->apToken)) {
+            $array['ap_token'] = $this->apToken;
+        }
 
         foreach ($array as $name => $value) {
             $array[$name] = (string)$value;
