@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (patryqhyper.pl)
- * Date: 18.05.2022 23:25
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
 use PatryQHyper\Payments\Exceptions\PaymentException;
@@ -61,7 +55,11 @@ class DpayDirectbillingPayment extends PaymentAbstract
         $array['value'] = $this->amount * 100;
         $array['url_success'] = $this->successUrl;
         $array['url_fail'] = $this->failUrl;
-        if (isset($this->custom)) $array['custom'] = $this->custom;
+
+        if (isset($this->custom)) {
+            $array['custom'] = $this->custom;
+        }
+
         $array['checksum'] = hash('sha256', implode('|', [
             $this->guid,
             $this->secretKey,
@@ -74,8 +72,9 @@ class DpayDirectbillingPayment extends PaymentAbstract
             'json' => $array
         ], 'POST');
 
-        if (!isset($request->status) || isset($request->error) || !$request->status || $request->error)
+        if (!isset($request->status) || isset($request->error) || !$request->status || $request->error) {
             throw new PaymentException('DPay error: ' . $request->error);
+        }
 
         return new PaymentGeneratedResponse(
             $request->msg,

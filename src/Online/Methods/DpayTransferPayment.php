@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (patryqhyper.pl)
- * Date: 18.05.2022 22:30
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
 use PatryQHyper\Payments\Exceptions\PaymentException;
@@ -165,18 +159,54 @@ class DpayTransferPayment extends PaymentAbstract
             $this->failUrl,
             $this->ipnUrl,
         ]));
-        if (isset($this->installment)) $array['installment'] = $this->installment;
-        if (isset($this->creditCard)) $array['creditcard'] = $this->creditCard;
-        if (isset($this->paysafecard)) $array['paysafecard'] = $this->paysafecard;
-        if (isset($this->paypal)) $array['paypal'] = $this->paypal;
-        if (isset($this->noBanks)) $array['nobanks'] = $this->noBanks;
-        if (isset($this->channel)) $array['channel'] = $this->channel;
-        if (isset($this->email)) $array['email'] = $this->email;
-        if (isset($this->clientName)) $array['client_name'] = $this->clientName;
-        if (isset($this->clientSurname)) $array['client_surname'] = $this->clientSurname;
-        if (isset($this->description)) $array['description'] = $this->description;
-        if (isset($this->custom)) $array['custom'] = $this->custom;
-        if (isset($this->style)) $array['style'] = $this->style;
+
+        if (isset($this->installment)) {
+            $array['installment'] = $this->installment;
+        }
+
+        if (isset($this->creditCard)) {
+            $array['creditcard'] = $this->creditCard;
+        }
+
+        if (isset($this->paysafecard)) {
+            $array['paysafecard'] = $this->paysafecard;
+        }
+
+        if (isset($this->paypal)) {
+            $array['paypal'] = $this->paypal;
+        }
+
+        if (isset($this->noBanks)) {
+            $array['nobanks'] = $this->noBanks;
+        }
+
+        if (isset($this->channel)) {
+            $array['channel'] = $this->channel;
+        }
+
+        if (isset($this->email)) {
+            $array['email'] = $this->email;
+        }
+
+        if (isset($this->clientName)) {
+            $array['client_name'] = $this->clientName;
+        }
+
+        if (isset($this->clientSurname)) {
+            $array['client_surname'] = $this->clientSurname;
+        }
+
+        if (isset($this->description)) {
+            $array['description'] = $this->description;
+        }
+
+        if (isset($this->custom)) {
+            $array['custom'] = $this->custom;
+        }
+
+        if (isset($this->style)) {
+            $array['style'] = $this->style;
+        }
 
         $request = $this->doRequest(sprintf('https://secure%s.dpay.pl/register', ($this->testEnvironment == self::ENVIRONMENT_TEST ? '-test' : '')), [
             'json' => $array,
@@ -186,8 +216,9 @@ class DpayTransferPayment extends PaymentAbstract
             ]
         ], 'POST');
 
-        if (!$request->status || $request->error)
+        if (!$request->status || $request->error) {
             throw new PaymentException('DPay error: ' . $request->msg);
+        }
 
         return new PaymentGeneratedResponse(
             $request->msg,
@@ -212,8 +243,9 @@ class DpayTransferPayment extends PaymentAbstract
             ]
         ], 'POST');
 
-        if (isset($request->message))
+        if (isset($request->message)) {
             throw new PaymentException('Dpay error: ' . json_encode($request));
+        }
 
         return $request->transaction;
     }

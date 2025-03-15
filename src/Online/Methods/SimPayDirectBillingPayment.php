@@ -1,20 +1,15 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (patryqhyper.pl)
- * Date: 05.06.2022 21:28
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
 use PatryQHyper\Payments\Exceptions\PaymentException;
+use PatryQHyper\Payments\Helpers\ArrayHelper;
 use PatryQHyper\Payments\Online\PaymentAbstract;
 use PatryQHyper\Payments\Online\PaymentGeneratedResponse;
 
 class SimPayDirectBillingPayment extends PaymentAbstract
 {
-    private string $apiKey;
+    private ?string $apiKey;
     private string $apiPassword;
     private string $serviceId;
     private string $serviceHash;
@@ -27,8 +22,9 @@ class SimPayDirectBillingPayment extends PaymentAbstract
     private string $returnFail;
     private string $phoneNumber;
     private string $steamId;
+    private string $email;
 
-    public function __construct(string $apiKey, string $apiPassword, string $serviceId, string $serviceHash)
+    public function __construct(?string $apiKey, string $apiPassword, string $serviceId, string $serviceHash)
     {
         $this->apiKey = $apiKey;
         $this->apiPassword = $apiPassword;
@@ -84,6 +80,12 @@ class SimPayDirectBillingPayment extends PaymentAbstract
         return $this;
     }
 
+    public function setEmail(string $email): SimPayDirectBillingPayment
+    {
+        $this->email = $email;
+        return $this;
+    }
+
     /**
      * @throws PaymentException
      */
@@ -91,24 +93,45 @@ class SimPayDirectBillingPayment extends PaymentAbstract
     {
         $array['amount'] = $this->amount;
         $array['amountType'] = $this->amountType;
-        if (isset($this->description)) $array['description'] = $this->description;
-        if (isset($this->control)) $array['control'] = $this->control;
-        if (isset($this->returnSuccess)) $array['returns']['success'] = $this->returnSuccess;
-        if (isset($this->returnFail)) $array['returns']['failure'] = $this->returnFail;
-        if (isset($this->phoneNumber)) $array['phoneNumber'] = $this->phoneNumber;
-        if (isset($this->steamId)) $array['steamid'] = $this->steamId;
-        $array['signature'] = $this->getPaymentSignature();
+
+        if (isset($this->description)) {
+            $array['description'] = $this->description;
+        }
+
+        if (isset($this->control)) {
+            $array['control'] = $this->control;
+        }
+
+        if (isset($this->returnSuccess)) {
+            $array['returns']['success'] = $this->returnSuccess;
+        }
+
+        if (isset($this->returnFail)) {
+            $array['returns']['failure'] = $this->returnFail;
+        }
+
+        if (isset($this->phoneNumber)) {
+            $array['phoneNumber'] = $this->phoneNumber;
+        }
+
+        if (isset($this->steamId)) {
+            $array['steamid'] = $this->steamId;
+        }
+
+        if (isset($this->email)) {
+            $array['email'] = $this->email;
+        }
 
         $request = $this->doRequest(sprintf('https://api.simpay.pl/directbilling/%s/transactions', $this->serviceId), [
             'json' => $array,
             'headers' => [
-                'X-SIM-KEY' => $this->apiKey,
-                'X-SIM-PASSWORD' => $this->apiPassword,
-            ]
+                'Authorization' => 'Bearer ' . $this->apiPassword,
+            ],
         ], 'POST', false, false);
 
-        if ($request->getStatusCode() != 200)
+        if ($request->getStatusCode() !== 200) {
             throw new PaymentException(sprintf('SimPay error: %s', $request->getBody()));
+        }
 
         $json = json_decode($request->getBody());
 
@@ -118,19 +141,13 @@ class SimPayDirectBillingPayment extends PaymentAbstract
         );
     }
 
-    private function getPaymentSignature(): string
+    public function generateIpnSignature(array $payload): string
     {
-        $array[] = $this->amount;
-        $array[] = $this->amountType;
-        if (isset($this->description)) $array[] = $this->description;
-        if (isset($this->control)) $array[] = $this->control;
-        if (isset($this->returnSuccess)) $array[] = $this->returnSuccess;
-        if (isset($this->returnFail)) $array[] = $this->returnFail;
-        if (isset($this->phoneNumber)) $array[] = $this->phoneNumber;
-        if (isset($this->steamId)) $array[] = $this->steamId;
+        unset($payload['signature']);
 
-        $array[] = $this->serviceHash;
+        $data = ArrayHelper::flatten($payload);
+        $data[] = $this->serviceHash;
 
-        return hash('sha256', implode('|', $array));
+        return hash('sha256', implode('|', $data));
     }
 }

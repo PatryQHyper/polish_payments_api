@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (wizjoner.dev)
- * Date: 27.11.2022 13:18
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
 use PatryQHyper\Payments\Exceptions\PaymentException;
@@ -215,7 +209,7 @@ class IMojePayment extends PaymentAbstract
             return false;
         }
 
-        if (strtoupper($parsedHeader['alg']) == 'MD5') {
+        if (strtoupper($parsedHeader['alg']) === 'MD5') {
             $hash = md5($payload . $serviceKey);
         }
         else if (in_array(strtoupper($parsedHeader['alg']), ['SHA', 'SHA1', 'SHA-1'])) {
@@ -225,15 +219,15 @@ class IMojePayment extends PaymentAbstract
             $hash = hash(strtolower($parsedHeader['alg']), $payload . $serviceKey);
         }
 
-        if (strcmp($parsedHeader['signature'], $hash) != 0) {
+        if (strcmp($parsedHeader['signature'], $hash) !== 0) {
             return false;
         }
 
-        if($parsedHeader['merchantid'] != $this->merchantId) {
+        if($parsedHeader['merchantid'] !== $this->merchantId) {
             return false;
         }
 
-        if($parsedHeader['serviceid'] != $this->serviceId) {
+        if($parsedHeader['serviceid'] !== $this->serviceId) {
             return false;
         }
 

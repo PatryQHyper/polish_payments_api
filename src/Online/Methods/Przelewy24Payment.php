@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (patryqhyper.pl)
- * Date: 21.05.2022 11:00
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
 use PatryQHyper\Payments\Exceptions\PaymentException;
@@ -206,24 +200,77 @@ class Przelewy24Payment extends PaymentAbstract
         $array['currency'] = $this->currency;
         $array['description'] = $this->description;
         $array['email'] = $this->email;
-        if (isset($this->client)) $array['client'] = $this->client;
-        if (isset($this->address)) $array['address'] = $this->address;
-        if (isset($this->zip)) $array['zip'] = $this->zip;
-        if (isset($this->city)) $array['city'] = $this->city;
-        if (isset($this->country)) $array['country'] = $this->country;
-        if (isset($this->phone)) $array['phone'] = $this->phone;
-        if (isset($this->language)) $array['language'] = $this->language;
-        if (isset($this->method)) $array['method'] = $this->method;
-        if (isset($this->urlReturn)) $array['urlReturn'] = $this->urlReturn;
-        if (isset($this->urlStatus)) $array['urlStatus'] = $this->urlStatus;
-        if (isset($this->timeLimit)) $array['timeLimit'] = $this->timeLimit;
-        if (isset($this->channel)) $array['channel'] = $this->channel;
-        if (isset($this->waitForResult)) $array['waitForResult'] = $this->waitForResult;
-        if (isset($this->regulationAccept)) $array['regulationAccept'] = $this->regulationAccept;
-        if (isset($this->shipping)) $array['shipping'] = $this->shipping;
-        if (isset($this->transferLabel)) $array['transferLabel'] = $this->transferLabel;
-        if (isset($this->methodRefId)) $array['methodRefId'] = $this->methodRefId;
-        if (isset($this->additional)) $array['additional'] = $this->additional;
+        if (isset($this->client)) {
+            $array['client'] = $this->client;
+        }
+
+        if (isset($this->address)) {
+            $array['address'] = $this->address;
+        }
+
+        if (isset($this->zip)) {
+            $array['zip'] = $this->zip;
+        }
+
+        if (isset($this->city)) {
+            $array['city'] = $this->city;
+        }
+
+        if (isset($this->country)) {
+            $array['country'] = $this->country;
+        }
+
+        if (isset($this->phone)) {
+            $array['phone'] = $this->phone;
+        }
+
+        if (isset($this->language)) {
+            $array['language'] = $this->language;
+        }
+
+        if (isset($this->method)) {
+            $array['method'] = $this->method;
+        }
+
+        if (isset($this->urlReturn)) {
+            $array['urlReturn'] = $this->urlReturn;
+        }
+
+        if (isset($this->urlStatus)) {
+            $array['urlStatus'] = $this->urlStatus;
+        }
+
+        if (isset($this->timeLimit)) {
+            $array['timeLimit'] = $this->timeLimit;
+        }
+
+        if (isset($this->channel)) {
+            $array['channel'] = $this->channel;
+        }
+
+        if (isset($this->waitForResult)) {
+            $array['waitForResult'] = $this->waitForResult;
+        }
+
+        if (isset($this->regulationAccept)) {
+            $array['regulationAccept'] = $this->regulationAccept;
+        }
+
+        if (isset($this->shipping)) {
+            $array['shipping'] = $this->shipping;
+        }
+
+        if (isset($this->transferLabel)) {
+            $array['transferLabel'] = $this->transferLabel;
+        }
+
+        if (isset($this->methodRefId)) {
+            $array['methodRefId'] = $this->methodRefId;
+        }
+
+        if (isset($this->additional)) {
+            $array['additional'] = $this->additional;
+        }
 
         $array['sign'] = hash('sha384', json_encode([
             'sessionId' => $this->sessionId,
@@ -238,11 +285,12 @@ class Przelewy24Payment extends PaymentAbstract
                 $this->posId,
                 $this->raportKey
             ],
-            'json' => $array
+            'json' => $array,
         ], 'POST', false, false);
 
-        if ($request->getStatusCode() != 200)
+        if ($request->getStatusCode() !== 200) {
             throw new PaymentException(sprintf('Przelewy24 error [%s]: %s', $request->getStatusCode(), $request->getBody()));
+        }
 
         $json = json_decode($request->getBody());
 
@@ -276,10 +324,10 @@ class Przelewy24Payment extends PaymentAbstract
                 $this->posId,
                 $this->raportKey
             ],
-            'json' => $array
+            'json' => $array,
         ], 'PUT', false, false);
 
-        if ($request->getStatusCode() != 200)
+        if ($request->getStatusCode() !== 200)
             throw new PaymentException(sprintf('Przelewy24 error [%s]: %s', $request->getStatusCode(), $request->getBody()));
 
         return true;

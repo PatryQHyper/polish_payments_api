@@ -1,14 +1,7 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (patryqhyper.pl)
- * Date: 16.05.2022 22:03
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
-use JetBrains\PhpStorm\Pure;
 use PatryQHyper\Payments\Exceptions\PaymentException;
 use PatryQHyper\Payments\Online\PaymentAbstract;
 use PatryQHyper\Payments\Online\PaymentGeneratedResponse;
@@ -23,8 +16,10 @@ class HotPayMobilePayment extends PaymentAbstract
 
     public function __construct(string $secret, string $method)
     {
-        if (!in_array($method, [self::METHOD_DIRECTBILLING, self::METHOD_PREMIUMRATE]))
+        if (!in_array($method, [self::METHOD_DIRECTBILLING, self::METHOD_PREMIUMRATE])) {
             throw new PaymentException('invalid method');
+        }
+
         $this->secret = $secret;
         $this->method = $method;
     }
@@ -35,37 +30,37 @@ class HotPayMobilePayment extends PaymentAbstract
     private string $redirectFailUrl;
     private string $orderId;
 
-    public function setAmount(float $amount)
+    public function setAmount(float $amount): self
     {
         $this->amount = $amount;
         return $this;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
         return $this;
     }
 
-    public function setRedirectSuccessUrl(string $redirectSuccessUrl)
+    public function setRedirectSuccessUrl(string $redirectSuccessUrl): self
     {
         $this->redirectSuccessUrl = $redirectSuccessUrl;
         return $this;
     }
 
-    public function setRedirectFailUrl(string $redirectFailUrl)
+    public function setRedirectFailUrl(string $redirectFailUrl): self
     {
         $this->redirectFailUrl = $redirectFailUrl;
         return $this;
     }
 
-    public function setOrderId(string $orderId)
+    public function setOrderId(string $orderId): self
     {
         $this->orderId = $orderId;
         return $this;
     }
 
-    public function generatePayment()
+    public function generatePayment(): PaymentGeneratedResponse
     {
         return new PaymentGeneratedResponse(sprintf('https://%s.hotpay.pl/?%s', $this->method, http_build_query([
             'SEKRET' => $this->secret,

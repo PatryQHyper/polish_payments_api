@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (patryqhyper.pl)
- * Date: 17.05.2022 15:03
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
 use PatryQHyper\Payments\Exceptions\PaymentException;
@@ -29,25 +23,25 @@ class PaybylinkDirectbillingPayment extends PaymentAbstract
         $this->hash = $hash;
     }
 
-    public function setAmount(float $amount)
+    public function setAmount(float $amount): self
     {
         $this->amount = $amount;
         return $this;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
         return $this;
     }
 
-    public function setControl(string $control)
+    public function setControl(string $control): self
     {
         $this->control = $control;
         return $this;
     }
 
-    public function generatePayment()
+    public function generatePayment(): PaymentGeneratedResponse
     {
         $data = [
             'price' => $this->amount * 100,
@@ -65,8 +59,9 @@ class PaybylinkDirectbillingPayment extends PaymentAbstract
             ]
         ], 'POST');
 
-        if ($request->status == 'success')
+        if ($request->status === 'success') {
             return new PaymentGeneratedResponse($request->clientURL);
+        }
 
         throw new PaymentException('Paybylink error: ' . $request->message);
     }
@@ -84,8 +79,9 @@ class PaybylinkDirectbillingPayment extends PaymentAbstract
             ]
         ], 'POST');
 
-        if ($request->status == 'error' && isset($request->code) && isset($request->message))
+        if ($request->status === 'error' && isset($request->code) && isset($request->message)) {
             throw new PaymentException('Paybylink error ' . $request->code . ': ' . $request->message);
+        }
 
         return $request;
     }
