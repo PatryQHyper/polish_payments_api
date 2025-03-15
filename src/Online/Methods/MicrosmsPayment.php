@@ -1,16 +1,13 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (patryqhyper.pl)
- * Date: 29.08.2022 21:07
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
 use PatryQHyper\Payments\Online\PaymentAbstract;
 use PatryQHyper\Payments\Online\PaymentGeneratedResponse;
 
+/**
+ * @deprecated MicroSMS does not exist anymore. This class will be removed in future release.
+ */
 class MicrosmsPayment extends PaymentAbstract
 {
     private int $shopId;
@@ -29,6 +26,8 @@ class MicrosmsPayment extends PaymentAbstract
 
     public function __construct(int $shopId, int $userId, string $hash, bool $useMd5 = false)
     {
+        trigger_error('Class ' . __CLASS__ . ' is deprecated. MicroSMS does not exist anymore. This class will be removed in future release.' , E_USER_DEPRECATED);
+
         $this->shopId = $shopId;
         $this->userId = $userId;
         $this->hash = $hash;

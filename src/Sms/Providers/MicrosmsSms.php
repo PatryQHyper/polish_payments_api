@@ -13,10 +13,14 @@ use PatryQHyper\Payments\Exceptions\PaymentException;
 use PatryQHyper\Payments\Exceptions\UsedSmsCodeException;
 use PatryQHyper\Payments\Sms\SmsAbstract;
 
+/**
+ * @deprecated MicroSMS does not exist anymore. This class will be removed in future release.
+ */
 class MicrosmsSms extends SmsAbstract
 {
     public function __construct(private int $userId, private int $serviceId)
     {
+        trigger_error('Class ' . __CLASS__ . ' is deprecated. MicroSMS does not exist anymore. This class will be removed in future release.' , E_USER_DEPRECATED);
     }
 
     /**
