@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created with love by: Patryk Vizauer (patryqhyper.pl)
- * Date: 21.05.2022 10:03
- * Using: PhpStorm
- */
-
 namespace PatryQHyper\Payments\Online\Methods;
 
 use PatryQHyper\Payments\Exceptions\PaymentException;
@@ -53,8 +47,9 @@ class OpenPayUPayment extends PaymentAbstract
         $this->clientSecret = $clientSecret;
         $this->sandbox = $sandbox;
 
-        if ($sandbox)
+        if ($sandbox) {
             $this->openPayUUrl = 'https://secure.snd.payu.com';
+        }
     }
 
     /**
@@ -71,7 +66,7 @@ class OpenPayUPayment extends PaymentAbstract
         ], 'POST', false, false);
 
         $json = json_decode($request->getBody());
-        if ($request->getStatusCode() != 200)
+        if ($request->getStatusCode() !== 200)
             throw new PaymentException(sprintf('OpenPayU oauth error %s: %s', $json->error, $json->error_description));
 
         $this->oauthToken = $json->access_token;
@@ -197,9 +192,17 @@ class OpenPayUPayment extends PaymentAbstract
         $array['buyer'] = $this->buyer;
         $array['products'] = $this->products;
 
-        if (isset($this->extOrderId)) $array['extOrderId'] = $this->extOrderId;
-        if (isset($this->visibleDescription)) $array['visibleDescription'] = $this->visibleDescription;
-        if (isset($this->continueUrl)) $array['continueUrl'] = $this->continueUrl;
+        if (isset($this->extOrderId)) {
+            $array['extOrderId'] = $this->extOrderId;
+        }
+
+        if (isset($this->visibleDescription)) {
+            $array['visibleDescription'] = $this->visibleDescription;
+        }
+
+        if (isset($this->continueUrl)) {
+            $array['continueUrl'] = $this->continueUrl;
+        }
 
         $request = $this->doRequest($this->openPayUUrl . '/api/v2_1/orders', [
             'headers' => [
@@ -211,8 +214,9 @@ class OpenPayUPayment extends PaymentAbstract
             'allow_redirects' => false
         ], 'POST', false, false);
 
-        if (!in_array($request->getStatusCode(), [200, 201, 301, 302]))
+        if (!in_array($request->getStatusCode(), [200, 201, 301, 302])) {
             throw new PaymentException('OpenPayU payment error: ' . $request->getBody());
+        }
 
         $json = json_decode($request->getBody());
         return new PaymentGeneratedResponse(
@@ -225,14 +229,14 @@ class OpenPayUPayment extends PaymentAbstract
     {
         $parsedHeader = $this->parseSignatureHeader($header);
         if (isset($parsedHeader['signature'])) {
-            if ($parsedHeader['algorithm'] == 'MD5')
+            if ($parsedHeader['algorithm'] === 'MD5')
                 $hash = md5($payload . $this->md5key);
             else if (in_array($parsedHeader['algorithm'], ['SHA', 'SHA1', 'SHA-1']))
                 $hash = sha1($payload . $this->md5key);
             else
                 $hash = hash('sha256', $payload . $this->md5key);
 
-            if (strcmp($parsedHeader['signature'], $hash) == 0) {
+            if (strcmp($parsedHeader['signature'], $hash) === 0) {
                 return true;
             }
         }
